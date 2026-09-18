@@ -1,0 +1,27 @@
+{
+	"name": "SonicLight Backend (Node/PostgreSQL)",
+	"dockerComposeFile": "../../docker-compose.dev.yml",
+	"service": "backend",
+	"workspaceFolder": "/app",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"ms-azuretools.vscode-docker",
+				"Prisma.prisma"
+			],
+			"settings": {
+				"editor.formatOnSave": true,
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"editor.codeActionsOnSave": {
+					"source.fixAll.eslint": "explicit"
+				},
+				"typescript.tsdk": "node_modules/typescript/lib"
+			}
+		}
+	},
+	"forwardPorts": [8000],
+	"postCreateCommand": "npm install",
+	"remoteUser": "node"
+}
