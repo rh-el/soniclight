@@ -7,11 +7,55 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ShapeType {
+  CIRCLE
+  RECTANGLE
+  TRIANGLE
+}
+
+enum ShapeColor {
+  COLOR_1
+  COLOR_2
+  COLOR_3
+  COLOR_4
+  COLOR_5
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  isAdmin   Boolean  @default(false) @map("is_admin")
-  createdAt DateTime @default(now()) @map("created_at")
+  id        String    @id @default(uuid()) @db.Uuid
+  username  String    @unique
+  isAdmin   Boolean   @default(false) @map("is_admin")
+  createdAt DateTime  @default(now()) @map("created_at")
+  drawings  Drawing[]
 
   @@map("users")
+}
+
+model Drawing {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  userId    String   @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shapes Shape[]
+
+  @@map("drawings")
+}
+
+model Shape {
+  id        String     @id @default(uuid()) @db.Uuid
+  type      ShapeType
+  color     ShapeColor
+  positionX Float      @map("position_x")
+  positionY Float      @map("position_y")
+  size      Float
+  drawingId String     @map("drawing_id") @db.Uuid
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  drawing Drawing @relation(fields: [drawingId], references: [id], onDelete: Cascade)
+
+  @@map("shapes")
 }
