@@ -17,7 +17,7 @@ Keep the architecture small and easy to understand for a junior full-stack techn
 
 ## Frontend
 
-The frontend is React.
+The frontend is React + react-router + shadcn + tailwind + zustand.
 
 Use the existing project structure:
 
@@ -46,7 +46,7 @@ Prefer keeping state local unless it genuinely needs to be shared.
 
 ## Backend
 
-The backend is Node + PostgreSQL.
+The backend is Node + PostgreSQL + prisma.
 
 Use the existing structure:
 

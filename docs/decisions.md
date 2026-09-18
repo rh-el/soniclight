@@ -8,6 +8,13 @@ Username is the sole user identifier for retrieving drawings.
 
 Do not introduce passwords, OAuth, sessions, JWT authentication, or other authentication mechanisms unless explicitly requested. The username-as-bearer approach is intentionally accepted for this exercise.
 
+Implementation of the username-as-bearer approach:
+
+- The frontend persists the entered username in `localStorage` after "login" (there is no server-side session).
+- Every API request sends the username in an `X-Username` header.
+- The backend resolves the current user by looking up that header value against the `users` table on each request. A missing or unknown username is treated as unauthenticated.
+- Admin access is determined by an `is_admin` boolean column on the `users` table (true only for the seeded `admin` user), checked via the same per-request lookup — not via a separate token or claim.
+
 ## Logical canvas coordinates
 
 Store shape geometry in a fixed logical coordinate system rather than physical pixels.
