@@ -81,17 +81,23 @@ export default function Toolbox() {
 								{icons[type]}
 							</Button>
 						</DropdownMenuTrigger>
-						<DropdownMenuContent>
+						<DropdownMenuContent
+							className="bg-background/90 border-border flex flex-col gap-2  p-2"
+							align="center"
+							sideOffset={10}
+							style={{ minWidth: 0, width: "fit-content" }}
+						>
 							{availableColors.map((c) => (
 								<DropdownMenuItem
 									key={c.name}
 									onSelect={() => chooseColor(c.name)}
+									className="cursor-pointer w-9 h-9 focus:brightness-120"
+									style={{ backgroundColor: c.hex }}
 								>
 									<span
 										className="size-3 rounded-full"
 										style={{ backgroundColor: c.hex }}
 									/>
-									{c.name}
 								</DropdownMenuItem>
 							))}
 						</DropdownMenuContent>
@@ -110,7 +116,7 @@ export default function Toolbox() {
 				{sliderShape && (
 					<>
 						<Slider
-							className="w-40 shrink-0"
+							className="w-40 shrink-0 cursor-pointer"
 							title="Size"
 							aria-label="Size"
 							min={MIN_SIZE}
@@ -123,7 +129,7 @@ export default function Toolbox() {
 						/>
 						{canRotate(sliderShape.type) && (
 							<Slider
-								className="w-40 shrink-0"
+								className="w-40 shrink-0 cursor-pointer"
 								title="Rotation"
 								aria-label="Rotation"
 								min={0}
