@@ -1,5 +1,5 @@
 import { Circle, RectangleHorizontal, Trash2, Triangle } from "lucide-react";
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
 import {
@@ -19,7 +19,6 @@ import {
 	SHAPE_TYPES,
 	canRotate,
 } from "../utils/shapes";
-import { Label } from "./ui/label";
 
 const icons: Record<ShapeType, ReactNode> = {
 	CIRCLE: <Circle />,
@@ -42,9 +41,14 @@ export default function Toolbox() {
 	const deleteSelected = useEditorStore((s) => s.deleteSelected);
 
 	const selected = shapes.find((s) => s.id === selectedId);
+	// Keep the last selected shape so the sliders stay rendered while the toolbar collapses.
+	const lastSelected = useRef(selected);
+	if (selected) lastSelected.current = selected;
+	const sliderShape = selected ?? lastSelected.current;
+	const isUpdating = mode === "shape-update" && !!selected;
 
 	return (
-		<div className="flex items-center gap-2 transition-width rounded-lg border border-border bg-background/90 p-2">
+		<div className="flex items-center gap-2 duration-300 transition-[width] rounded-lg border border-border bg-background/90 p-2">
 			{SHAPE_TYPES.map((type) => {
 				const availableColors = COLORS.filter(
 					(c) =>
@@ -94,36 +98,49 @@ export default function Toolbox() {
 					</DropdownMenu>
 				);
 			})}
-			{mode === "shape-update" && selected && (
-				<Slider
-					className="w-40"
-					title="Size"
-					aria-label="Size"
-					min={MIN_SIZE}
-					max={MAX_SIZE}
-					step={1}
-					value={[selected.size]}
-					onValueChange={([size]) => resizeShape(selected.id, size)}
-				/>
-			)}
-			{mode === "shape-update" &&
-				selected &&
-				canRotate(selected.type) && (
-					<Slider
-						className="w-40"
-						title="Rotation"
-						aria-label="Rotation"
-						min={0}
-						max={MAX_ROTATION}
-						step={1}
-						value={[selected.rotation]}
-						onValueChange={([rotation]) =>
-							rotateShape(selected.id, rotation)
-						}
-					/>
+			<div
+				aria-hidden={!isUpdating}
+				className={cn(
+					"flex items-center gap-2 overflow-hidden transition-all duration-300 ease-out",
+					isUpdating
+						? "max-w-96 opacity-100"
+						: "pointer-events-none -mr-2 max-w-0 opacity-0",
 				)}
+			>
+				{sliderShape && (
+					<>
+						<Slider
+							className="w-40 shrink-0"
+							title="Size"
+							aria-label="Size"
+							min={MIN_SIZE}
+							max={MAX_SIZE}
+							step={1}
+							value={[sliderShape.size]}
+							onValueChange={([size]) =>
+								resizeShape(sliderShape.id, size)
+							}
+						/>
+						{canRotate(sliderShape.type) && (
+							<Slider
+								className="w-40 shrink-0"
+								title="Rotation"
+								aria-label="Rotation"
+								min={0}
+								max={MAX_ROTATION}
+								step={1}
+								value={[sliderShape.rotation]}
+								onValueChange={([rotation]) =>
+									rotateShape(sliderShape.id, rotation)
+								}
+							/>
+						)}
+					</>
+				)}
+			</div>
 			<Button
 				disabled={mode !== "shape-update"}
+				variant="destructive"
 				className={cn(buttonBase, "bg-transparent")}
 				onClick={deleteSelected}
 			>

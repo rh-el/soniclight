@@ -1,162 +1,227 @@
-import { useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef } from "react";
+import p5 from "p5";
 import { useEditorStore } from "../state-management/editor";
-import type { ShapeType } from "../types";
+import type { EditorShape, ShapeType } from "../types";
 import {
 	CANVAS_SIZE,
+	DEFAULT_SIZE,
 	clampCenter,
 	colorHex,
 	shapeExtent,
 } from "../utils/shapes";
 
-function ShapeGraphic({
-	type,
-	size,
-	x,
-	y,
-	color,
-	rotation = 0,
-	...props
-}: {
-	type: ShapeType;
-	size: number;
+type Drawable = Pick<EditorShape, "type" | "color" | "size" | "rotation"> & {
 	x: number;
 	y: number;
-	color: string;
-	rotation?: number;
-} & React.SVGProps<SVGElement>) {
-	const fill = colorHex(color);
-	const { width, height } = shapeExtent(type, size);
-	const common = {
-		fill,
-		transform: rotation ? `rotate(${rotation} ${x} ${y})` : undefined,
-		...(props as object),
-	};
-	if (type === "CIRCLE")
-		return <circle cx={x} cy={y} r={size / 2} {...common} />;
-	if (type === "RECTANGLE")
-		return (
-			<rect
-				x={x - width / 2}
-				y={y - height / 2}
-				width={width}
-				height={height}
-				{...common}
-			/>
+};
+
+function drawShape(p: p5, shape: Drawable, alpha = 255) {
+	const { width, height } = shapeExtent(shape.type, shape.size);
+	const fill = p.color(colorHex(shape.color));
+	fill.setAlpha(alpha);
+	p.push();
+	p.translate(shape.x, shape.y);
+	p.rotate(p.radians(shape.rotation));
+	p.fill(fill);
+
+	if (shape.type === "CIRCLE") {
+		p.circle(0, 0, shape.size);
+	} else if (shape.type === "RECTANGLE") {
+		p.rect(-width / 2, -height / 2, width, height);
+	} else
+		p.triangle(
+			0,
+			-height / 2,
+			width / 2,
+			height / 2,
+			-width / 2,
+			height / 2,
 		);
-	const points = `${x},${y - height / 2} ${x + width / 2},${y + height / 2} ${x - width / 2},${y + height / 2}`;
-	return <polygon points={points} {...common} />;
+	p.pop();
 }
 
+function hitTest(shape: EditorShape, px: number, py: number) {
+	const rad = (-shape.rotation * Math.PI) / 180;
+	const dx = px - shape.positionX;
+	const dy = py - shape.positionY;
+	const x = dx * Math.cos(rad) - dy * Math.sin(rad);
+	const y = dx * Math.sin(rad) + dy * Math.cos(rad);
+	const { width, height } = shapeExtent(shape.type, shape.size);
+
+	if (shape.type === "CIRCLE") {
+		return Math.hypot(x, y) <= shape.size / 2;
+	}
+
+	if (shape.type === "RECTANGLE") {
+		return Math.abs(x) <= width / 2 && Math.abs(y) <= height / 2;
+	}
+	// triangle: apex at the top center, base along the bottom of the bounding box.
+	if (Math.abs(y) > height / 2) {
+		return false;
+	}
+	const halfAtY = ((y + height / 2) / height) * (width / 2);
+	return Math.abs(x) <= halfAtY;
+}
+
+const topShapeAt = (x: number, y: number) =>
+	[...useEditorStore.getState().shapes]
+		.sort((a, b) => b.z - a.z)
+		.find((s) => hitTest(s, x, y));
+
 export default function Canvas() {
-	const svgRef = useRef<SVGSVGElement>(null);
-	const dragRef = useRef<{ id: string; dx: number; dy: number } | null>(null);
-	const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
 
-	const shapes = useEditorStore((s) => s.shapes);
-	const mode = useEditorStore((s) => s.mode);
-	const pendingType = useEditorStore((s) => s.pendingType);
-	const pendingColor = useEditorStore((s) => s.pendingColor);
-	const selectedId = useEditorStore((s) => s.selectedId);
-	const place = useEditorStore((s) => s.place);
-	const select = useEditorStore((s) => s.select);
-	const moveShape = useEditorStore((s) => s.moveShape);
-	const cancel = useEditorStore((s) => s.cancel);
+	useEffect(() => {
+		const container = containerRef.current!;
+		let drag: { id: string; dx: number; dy: number } | null = null;
+		let scale = 1;
+		let offsetX = 0;
+		let offsetY = 0;
 
-	// Screen pixels -> logical canvas units.
-	const toLogical = (e: PointerEvent) => {
-		const svg = svgRef.current!;
-		const point = new DOMPoint(e.clientX, e.clientY).matrixTransform(
-			svg.getScreenCTM()!.inverse(),
-		);
-		return { x: point.x, y: point.y };
-	};
+		const sketch = (p: p5) => {
+			const layout = () => {
+				const w = Math.max(1, container.clientWidth);
+				const h = Math.max(1, container.clientHeight);
+				scale = Math.min(w, h) / CANVAS_SIZE;
+				offsetX = (w - CANVAS_SIZE * scale) / 2;
+				offsetY = (h - CANVAS_SIZE * scale) / 2;
+				return { w, h };
+			};
 
-	const handleBackgroundDown = (e: PointerEvent) => {
-		const point = toLogical(e);
-		if (mode === "color-selected") place(point.x, point.y);
-		else cancel();
-	};
+			const toLogical = () => ({
+				x: (p.mouseX - offsetX) / scale,
+				y: (p.mouseY - offsetY) / scale,
+			});
 
-	const handleShapeDown = (
-		e: PointerEvent,
-		id: string,
-		x: number,
-		y: number,
-	) => {
-		if (mode === "color-selected") return;
-		e.stopPropagation();
-		const point = toLogical(e);
-		select(id);
-		dragRef.current = { id, dx: x - point.x, dy: y - point.y };
-		svgRef.current!.setPointerCapture(e.pointerId);
-	};
+			const isOnCanvas = (e: Event) =>
+				e.target ===
+				(p as unknown as { canvas: HTMLCanvasElement }).canvas;
 
-	const handleMove = (e: PointerEvent) => {
-		const point = toLogical(e);
-		setCursor(point);
-		const drag = dragRef.current;
-		if (drag) moveShape(drag.id, point.x + drag.dx, point.y + drag.dy);
-	};
+			p.setup = () => {
+				const { w, h } = layout();
+				const canvas = p.createCanvas(w, h);
+				canvas.parent(container);
+				canvas.elt.classList.add("bg-card", "touch-none");
+				new ResizeObserver(() => {
+					const { w, h } = layout();
+					p.resizeCanvas(w, h);
+				}).observe(container);
+			};
 
-	const ghost =
-		mode === "color-selected" && pendingType && pendingColor && cursor
-			? {
-					type: pendingType,
-					color: pendingColor,
-					...clampCenter(pendingType, 100, cursor.x, cursor.y),
+			p.draw = () => {
+				const { shapes, mode, pendingType, pendingColor, selectedId } =
+					useEditorStore.getState();
+				const cursor = toLogical();
+				p.clear();
+				p.translate(offsetX, offsetY);
+				p.scale(scale);
+
+				p.noFill();
+				p.stroke("#555");
+				p.strokeWeight(2);
+				p.rect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+				for (const shape of [...shapes].sort((a, b) => a.z - b.z)) {
+					if (shape.id === selectedId) {
+						p.stroke("white");
+						p.strokeWeight(2);
+					} else {
+						p.noStroke();
+					}
+					drawShape(p, {
+						...shape,
+						x: shape.positionX,
+						y: shape.positionY,
+					});
 				}
-			: null;
 
-	return (
-		<svg
-			ref={svgRef}
-			viewBox={`0 0 ${CANVAS_SIZE} ${CANVAS_SIZE}`}
-			className="h-full w-full touch-none select-none"
-			onPointerDown={handleBackgroundDown}
-			onPointerMove={handleMove}
-			onPointerUp={() => (dragRef.current = null)}
-		>
-			<rect
-				width={CANVAS_SIZE}
-				height={CANVAS_SIZE}
-				className="fill-card stroke-border"
-				strokeWidth={2}
-			/>
-			{[...shapes]
-				.sort((a, b) => a.z - b.z)
-				.map((shape) => (
-					<ShapeGraphic
-						key={shape.id}
-						type={shape.type}
-						color={shape.color}
-						size={shape.size}
-						rotation={shape.rotation}
-						x={shape.positionX}
-						y={shape.positionY}
-						stroke={selectedId === shape.id ? "white" : "none"}
-						strokeWidth={4}
-						style={{ cursor: "pointer" }}
-						onPointerDown={(e: PointerEvent) =>
-							handleShapeDown(
-								e,
-								shape.id,
-								shape.positionX,
-								shape.positionY,
-							)
-						}
-					/>
-				))}
-			{ghost && (
-				<ShapeGraphic
-					type={ghost.type}
-					color={ghost.color}
-					size={100}
-					x={ghost.x}
-					y={ghost.y}
-					opacity={0.5}
-					pointerEvents="none"
-				/>
-			)}
-		</svg>
-	);
+				p.noStroke();
+				const overCanvas =
+					p.mouseX >= 0 &&
+					p.mouseY >= 0 &&
+					p.mouseX <= p.width &&
+					p.mouseY <= p.height;
+				if (
+					mode === "color-selected" &&
+					pendingType &&
+					pendingColor &&
+					overCanvas
+				) {
+					const c = clampCenter(
+						pendingType as ShapeType,
+						DEFAULT_SIZE,
+						cursor.x,
+						cursor.y,
+					);
+					drawShape(
+						p,
+						{
+							type: pendingType,
+							color: pendingColor,
+							size: DEFAULT_SIZE,
+							rotation: 0,
+							...c,
+						},
+						128,
+					);
+				}
+
+				(
+					p as unknown as { canvas: HTMLCanvasElement }
+				).canvas.style.cursor =
+					mode !== "color-selected" &&
+					overCanvas &&
+					topShapeAt(cursor.x, cursor.y)
+						? "pointer"
+						: "default";
+			};
+
+			p.mousePressed = (e: MouseEvent) => {
+				if (!isOnCanvas(e)) {
+					return;
+				}
+
+				const { mode, place, select, cancel } =
+					useEditorStore.getState();
+				const { x, y } = toLogical();
+
+				if (mode === "color-selected") {
+					place(x, y);
+					return;
+				}
+
+				const hit = topShapeAt(x, y);
+				if (!hit) {
+					cancel();
+					return;
+				}
+				select(hit.id);
+				drag = {
+					id: hit.id,
+					dx: hit.positionX - x,
+					dy: hit.positionY - y,
+				};
+			};
+
+			p.mouseDragged = () => {
+				if (!drag) {
+					return;
+				}
+
+				const { x, y } = toLogical();
+				useEditorStore
+					.getState()
+					.moveShape(drag.id, x + drag.dx, y + drag.dy);
+			};
+
+			p.mouseReleased = () => {
+				drag = null;
+			};
+		};
+
+		const instance = new p5(sketch);
+		return () => instance.remove();
+	}, []);
+
+	return <div ref={containerRef} className="absolute inset-0" />;
 }
