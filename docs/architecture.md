@@ -69,6 +69,17 @@ General responsibility:
 
 Keep database access out of route handlers when a service/CRUD layer is already appropriate.
 
+## Backend error handling
+
+Errors are raised from the service layer and turned into HTTP responses in one place.
+
+- `exceptions.ts` defines `AppError` (message + HTTP `status`) and one subclass per domain error (e.g. `InvalidUsernameError` → 400, `UsernameAlreadyExistsError` → 409).
+- `services/` hold all the logic and validation, and `throw` these exceptions. They know nothing about `req`/`res`.
+- `routes/` only read the request, call a service, and send the success response. No `try/catch`, no status codes for errors.
+- `core/errors.ts` exports `errorHandler`, an Express error middleware registered last in `main.ts`. It maps `AppError` to its status and `{ error: message }`; anything else is logged and returned as a 500.
+- Express 5 forwards rejected promises from async handlers to the error middleware, so no wrapper or `next(err)` is needed.
+- To add an error: create an `AppError` subclass in `exceptions.ts` with its status, throw it from the service. Nothing else changes.
+
 ## Main data flow
 
 ```text
