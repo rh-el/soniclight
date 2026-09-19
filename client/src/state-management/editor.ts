@@ -18,6 +18,7 @@ interface EditorState {
 	rotateShape: (id: string, rotation: number) => void;
 	deleteSelected: () => void;
 	cancel: () => void;
+	load: (shapes: Shape[]) => void;
 	reset: () => void;
 }
 
@@ -135,6 +136,13 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 	},
 
 	cancel: () => set(idle),
+
+	load: (shapes) =>
+		set({
+			shapes,
+			nextZ: Math.max(0, ...shapes.map((s) => s.z)) + 1,
+			...idle,
+		}),
 
 	reset: () => set({ shapes: [], nextZ: 1, ...idle }),
 }));
