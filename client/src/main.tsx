@@ -5,13 +5,19 @@ import Home from "./pages/Home";
 import "../index.css";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import { homeLoader, redirectIfLoggedInLoader } from "./loaders";
+import Draw from "./pages/Draw";
+import { drawLoader, homeLoader, redirectIfLoggedInLoader } from "./loaders";
 
 const router = createBrowserRouter([
 	{
 		path: "/:username/home",
 		loader: homeLoader,
 		element: <Home />,
+	},
+	{
+		path: "/:username/draw/:drawid",
+		loader: drawLoader,
+		element: <Draw />,
 	},
 	{
 		path: "/login",
