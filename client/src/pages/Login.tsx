@@ -1,0 +1,85 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardFooter } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+
+import { USERNAME_KEY } from "../types";
+
+export default function Login() {
+	const [username, setUsername] = useState("");
+	const [error, setError] = useState<string | null>(null);
+	const navigate = useNavigate();
+
+	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const trimmed = username.trim();
+		if (trimmed.length < 3) {
+			setError("Username should be at least 3 characters");
+			return;
+		}
+		// Username is the only identity (sent as X-Username header).
+		localStorage.setItem(USERNAME_KEY, trimmed);
+		navigate("/");
+	};
+
+	return (
+		<div className="min-h-dvh w-full flex items-center justify-center overflow-hidden bg-background p-4 md:p-0">
+			<div className="w-full flex flex-col gap-10 max-w-md">
+				<div className="text-center">
+					<h1 className="font-bold font-mono tracking-tight text-6xl md:text-7xl text-foreground">
+						SonicLight
+					</h1>
+				</div>
+
+				<Card className="bg-card/50 border-border/50">
+					<form onSubmit={handleSubmit}>
+						<div className="flex flex-col gap-4">
+							<CardContent className="space-y-2">
+								<Label htmlFor="username">username</Label>
+								<Input
+									id="username"
+									name="username"
+									type="text"
+									autoComplete="username"
+									placeholder="enter your username"
+									value={username}
+									onChange={(e) => {
+										setUsername(e.target.value);
+										setError(null);
+									}}
+									required
+									aria-invalid={Boolean(error)}
+								/>
+								{error && (
+									<p className="text-sm text-destructive">
+										{error}
+									</p>
+								)}
+							</CardContent>
+
+							<CardFooter className="flex flex-col gap-3 pt-2">
+								<Button
+									type="submit"
+									className="w-full font-mono"
+								>
+									enter
+								</Button>
+								<Button
+									type="button"
+									variant="outline"
+									className="w-full font-mono transition-colors"
+									onClick={() => navigate("/signup")}
+								>
+									create an account
+								</Button>
+							</CardFooter>
+						</div>
+					</form>
+				</Card>
+			</div>
+		</div>
+	);
+}
