@@ -75,6 +75,7 @@ export default function Toolbox() {
 								disabled={availableColors.length === 0}
 								className={cn(
 									buttonBase,
+									"hover:bg-primary/50",
 									isActive ? "bg-primary" : "bg-transparent",
 								)}
 							>
