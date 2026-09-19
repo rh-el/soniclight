@@ -11,6 +11,7 @@ export default function Draw() {
 	const drawing = useLoaderData() as Drawing;
 
 	useEffect(() => {
+		useEditorStore.getState().load(drawing.shapes);
 		const onKeyDown = (e: KeyboardEvent) => {
 			if (e.key === "Escape") {
 				useEditorStore.getState().cancel();
@@ -22,7 +23,7 @@ export default function Draw() {
 			window.removeEventListener("keydown", onKeyDown);
 			useEditorStore.getState().reset();
 		};
-	}, []);
+	}, [drawing.id, drawing.shapes]);
 
 	return (
 		<div className="relative h-dvh w-full overflow-hidden bg-background">

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { Drawing } from "../types";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
@@ -16,6 +17,8 @@ export default function CardComponent({
 	isEmpty = false,
 	onCreate,
 }: CardComponentProps) {
+	const navigate = useNavigate();
+
 	if (isEmpty) {
 		return (
 			<Card
@@ -40,7 +43,12 @@ export default function CardComponent({
 				</div>
 			</CardContent>
 			<CardFooter>
-				<Button className="w-full font-mono bg-primary/20 text-primary-light cursor-pointer hover:text-foreground">
+				<Button
+					className="w-full font-mono bg-primary/20 text-primary-light cursor-pointer hover:text-foreground"
+					onClick={() =>
+						navigate(`/${username}/draw/${drawingData?.id}`)
+					}
+				>
 					edit
 				</Button>
 			</CardFooter>
