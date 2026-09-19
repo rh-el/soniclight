@@ -101,7 +101,12 @@ export default function Canvas() {
 				const { w, h } = layout();
 				const canvas = p.createCanvas(w, h);
 				canvas.parent(container);
-				canvas.elt.classList.add("bg-card", "touch-none");
+				canvas.elt.classList.add(
+					"bg-background",
+					"touch-none",
+					"p-4",
+					"radius-xl",
+				);
 				new ResizeObserver(() => {
 					const { w, h } = layout();
 					p.resizeCanvas(w, h);
@@ -117,9 +122,9 @@ export default function Canvas() {
 				p.scale(scale);
 
 				p.noFill();
-				p.stroke("#555");
-				p.strokeWeight(2);
-				p.rect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+				p.stroke("#282828");
+				p.strokeWeight(1);
+				p.rect(0, 0, CANVAS_SIZE, CANVAS_SIZE, 10, 10, 10, 10);
 
 				for (const shape of [...shapes].sort((a, b) => a.z - b.z)) {
 					if (shape.id === selectedId) {
@@ -223,5 +228,5 @@ export default function Canvas() {
 		return () => instance.remove();
 	}, []);
 
-	return <div ref={containerRef} className="absolute inset-0" />;
+	return <div ref={containerRef} className="absolute inset-0 top-4" />;
 }
