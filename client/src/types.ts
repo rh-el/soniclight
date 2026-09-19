@@ -25,3 +25,8 @@ export interface LoginResponse {
 	username: string;
 	drawings: Drawing[];
 }
+
+export interface DrawingsResponse {
+	username: string;
+	drawings: Drawing[];
+}

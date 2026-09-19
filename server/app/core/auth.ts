@@ -6,10 +6,6 @@ declare module "express-serve-static-core" {
 	}
 }
 
-/**
- * Username-as-bearer auth (see docs/decisions.md): the frontend sends the
- * logged-in username in this header on every request, no session/JWT involved.
- */
 export const USERNAME_HEADER = "x-username";
 
 export const resolveUsername: RequestHandler = (req, _res, next) => {
