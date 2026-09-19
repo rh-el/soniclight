@@ -14,11 +14,11 @@ enum ShapeType {
 }
 
 enum ShapeColor {
-  COLOR_1
-  COLOR_2
-  COLOR_3
-  COLOR_4
-  COLOR_5
+  red
+  orange
+  green
+  blue
+  purple
 }
 
 model User {
@@ -51,6 +51,8 @@ model Shape {
   positionX Float      @map("position_x")
   positionY Float      @map("position_y")
   size      Float
+  rotation  Float      @default(0)
+  z         Int        @default(0)
   drawingId String     @map("drawing_id") @db.Uuid
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @updatedAt @map("updated_at")

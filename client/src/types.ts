@@ -12,9 +12,9 @@ export interface Shape {
 	positionX: number;
 	positionY: number;
 	size: number;
+	z: number;
+	rotation: number;
 }
-
-export type EditorShape = Shape & { z: number; rotation: number };
 
 export type EditorMode =
 	| "base"
@@ -43,4 +43,9 @@ export interface DrawingsResponse {
 
 export interface CreateDrawingResponse {
 	drawingId: string;
+}
+
+export interface SaveShapesResponse {
+	drawingId: string;
+	shapeCount: number;
 }

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import p5 from "p5";
 import { useEditorStore } from "../state-management/editor";
-import type { EditorShape, ShapeType } from "../types";
+import type { Shape, ShapeType } from "../types";
 import {
 	CANVAS_SIZE,
 	DEFAULT_SIZE,
@@ -10,7 +10,7 @@ import {
 	shapeExtent,
 } from "../utils/shapes";
 
-type Drawable = Pick<EditorShape, "type" | "color" | "size" | "rotation"> & {
+type Drawable = Pick<Shape, "type" | "color" | "size" | "rotation"> & {
 	x: number;
 	y: number;
 };
@@ -40,7 +40,7 @@ function drawShape(p: p5, shape: Drawable, alpha = 255) {
 	p.pop();
 }
 
-function hitTest(shape: EditorShape, px: number, py: number) {
+function hitTest(shape: Shape, px: number, py: number) {
 	const rad = (-shape.rotation * Math.PI) / 180;
 	const dx = px - shape.positionX;
 	const dy = py - shape.positionY;
@@ -124,7 +124,7 @@ export default function Canvas() {
 				p.noFill();
 				p.stroke("#282828");
 				p.strokeWeight(1);
-				p.rect(0, 0, CANVAS_SIZE, CANVAS_SIZE, 10, 10, 10, 10);
+				p.rect(0, 0, CANVAS_SIZE, CANVAS_SIZE, 20, 20, 20, 20);
 
 				for (const shape of [...shapes].sort((a, b) => a.z - b.z)) {
 					if (shape.id === selectedId) {
@@ -228,5 +228,5 @@ export default function Canvas() {
 		return () => instance.remove();
 	}, []);
 
-	return <div ref={containerRef} className="absolute inset-0 top-4" />;
+	return <div ref={containerRef} className="absolute inset-0" />;
 }

@@ -1,8 +1,9 @@
 import { Router } from "express";
 import {
 	createDrawing,
-	getDrawing,
+	getOwnedDrawing,
 	listUserDrawings,
+	saveDrawingShapes,
 } from "../services/drawing";
 
 export const drawingRouter = Router();
@@ -18,6 +19,15 @@ drawingRouter.post("/", async (req, res) => {
 });
 
 drawingRouter.get("/:id", async (req, res) => {
-	const drawing = await getDrawing(req.username, req.params.id);
+	const drawing = await getOwnedDrawing(req.username, req.params.id);
 	res.json(drawing);
+});
+
+drawingRouter.put("/:id/shapes", async (req, res) => {
+	const result = await saveDrawingShapes(
+		req.username,
+		req.params.id,
+		req.body?.shapes,
+	);
+	res.json(result);
 });

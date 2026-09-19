@@ -10,7 +10,7 @@ export const parseUsername = (username: unknown): string => {
 	return trimmed;
 };
 
-export const requireUser = async (username: unknown) => {
+export const requireUser = async (username: string | undefined) => {
 	const user = await findUserByUsername(parseUsername(username));
 	if (!user) throw new UnknownUserError();
 	return user;

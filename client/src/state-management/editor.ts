@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import type { EditorMode, EditorShape, ShapeType } from "../types";
+import type { EditorMode, Shape, ShapeType } from "../types";
 import { DEFAULT_SIZE, canRotate, clampCenter } from "../utils/shapes";
 
 interface EditorState {
-	shapes: EditorShape[];
+	shapes: Shape[];
 	mode: EditorMode;
 	pendingType: ShapeType | null;
 	pendingColor: string | null;
@@ -36,14 +36,19 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 	// Clicking the active type button again cancels.
 	chooseType: (type) => {
 		const { mode, pendingType } = get();
-		if (mode !== "base" && mode !== "shape-update" && pendingType === type) {
+		if (
+			mode !== "base" &&
+			mode !== "shape-update" &&
+			pendingType === type
+		) {
 			set(idle);
 			return;
 		}
 		set({ ...idle, mode: "shape-selected", pendingType: type });
 	},
 
-	chooseColor: (color) => set({ mode: "color-selected", pendingColor: color }),
+	chooseColor: (color) =>
+		set({ mode: "color-selected", pendingColor: color }),
 
 	place: (x, y) => {
 		const { pendingType, pendingColor, shapes, nextZ } = get();
@@ -71,7 +76,9 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 	// Selecting brings the shape to the front.
 	select: (id) => {
 		const { selectedId, nextZ, shapes } = get();
-		if (selectedId === id) return;
+		if (selectedId === id) {
+			return;
+		}
 		set({
 			shapes: shapes.map((s) => (s.id === id ? { ...s, z: nextZ } : s)),
 			nextZ: nextZ + 1,
@@ -95,7 +102,13 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 		set({
 			shapes: get().shapes.map((s) => {
 				if (s.id !== id) return s;
-				const c = clampCenter(s.type, size, s.positionX, s.positionY, s.rotation);
+				const c = clampCenter(
+					s.type,
+					size,
+					s.positionX,
+					s.positionY,
+					s.rotation,
+				);
 				return { ...s, size, positionX: c.x, positionY: c.y };
 			}),
 		}),
@@ -104,7 +117,13 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 		set({
 			shapes: get().shapes.map((s) => {
 				if (s.id !== id || !canRotate(s.type)) return s;
-				const c = clampCenter(s.type, s.size, s.positionX, s.positionY, rotation);
+				const c = clampCenter(
+					s.type,
+					s.size,
+					s.positionX,
+					s.positionY,
+					rotation,
+				);
 				return { ...s, rotation, positionX: c.x, positionY: c.y };
 			}),
 		}),
