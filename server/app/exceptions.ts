@@ -19,3 +19,9 @@ export class UsernameAlreadyExistsError extends AppError {
 		super(message, 409);
 	}
 }
+
+export class UnknownUserError extends AppError {
+	constructor(message = "Unknown username") {
+		super(message, 401);
+	}
+}

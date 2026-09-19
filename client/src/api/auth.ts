@@ -1,4 +1,4 @@
-import type { SignupResponse } from "../types";
+import type { LoginResponse, SignupResponse } from "../types";
 import { request } from "./client";
 
 export const signup = (username: string) =>
@@ -7,3 +7,6 @@ export const signup = (username: string) =>
 		{ method: "POST", body: JSON.stringify({ username }) },
 		"Failed to create account",
 	);
+
+export const login = (username: string) =>
+	request<LoginResponse>("/user/login", { username }, "Failed to log in");
