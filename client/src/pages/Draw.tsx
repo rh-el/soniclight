@@ -1,15 +1,36 @@
+import { useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 import type { Drawing } from "../types";
+import Canvas from "../components/Canvas";
+import LeftPanel from "../components/LeftPanel";
+import Toolbox from "../components/Toolbox";
+import { useEditorStore } from "../state-management/editor";
 
 export default function Draw() {
 	const drawing = useLoaderData() as Drawing;
 
+	useEffect(() => {
+		const onKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				useEditorStore.getState().cancel();
+			}
+		};
+
+		window.addEventListener("keydown", onKeyDown);
+		return () => {
+			window.removeEventListener("keydown", onKeyDown);
+			useEditorStore.getState().reset();
+		};
+	}, []);
+
 	return (
-		<div className="w-full h-dvh flex flex-col items-center justify-center overflow-hidden bg-background">
-			<div className="flex flex-col w-full h-full max-w-338 py-10 px-10 gap-6">
-				<h1 className="font-bold font-mono tracking-tight text-4xl md:text-5xl text-foreground">
-					{drawing.name}
-				</h1>
+		<div className="relative h-dvh w-full overflow-hidden bg-background">
+			<Canvas />
+			<div className="absolute left-4 top-4">
+				<LeftPanel title={drawing.name} />
+			</div>
+			<div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+				<Toolbox />
 			</div>
 		</div>
 	);

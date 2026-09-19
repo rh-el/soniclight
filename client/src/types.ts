@@ -3,14 +3,24 @@ export interface SignupResponse {
 	username: string;
 }
 
+export type ShapeType = "CIRCLE" | "RECTANGLE" | "TRIANGLE";
+
 export interface Shape {
 	id: string;
-	type: "CIRCLE" | "RECTANGLE" | "TRIANGLE";
+	type: ShapeType;
 	color: string;
 	positionX: number;
 	positionY: number;
 	size: number;
 }
+
+export type EditorShape = Shape & { z: number; rotation: number };
+
+export type EditorMode =
+	| "base"
+	| "shape-selected"
+	| "color-selected"
+	| "shape-update";
 
 export interface Drawing {
 	id: string;
