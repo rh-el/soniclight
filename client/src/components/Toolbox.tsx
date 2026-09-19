@@ -43,7 +43,9 @@ export default function Toolbox() {
 	const selected = shapes.find((s) => s.id === selectedId);
 	// Keep the last selected shape so the sliders stay rendered while the toolbar collapses.
 	const lastSelected = useRef(selected);
-	if (selected) lastSelected.current = selected;
+	if (selected) {
+		lastSelected.current = selected;
+	}
 	const sliderShape = selected ?? lastSelected.current;
 	const isUpdating = mode === "shape-update" && !!selected;
 
@@ -108,7 +110,7 @@ export default function Toolbox() {
 			<div
 				aria-hidden={!isUpdating}
 				className={cn(
-					"flex items-center gap-2 overflow-hidden transition-all duration-300 ease-out",
+					"flex items-center gap-2 overflow-hidden transition-all duration-300 ease-out h-4",
 					isUpdating
 						? "max-w-96 opacity-100"
 						: "pointer-events-none -mr-2 max-w-0 opacity-0",
@@ -148,7 +150,10 @@ export default function Toolbox() {
 			<Button
 				disabled={mode !== "shape-update"}
 				variant="destructive"
-				className={cn(buttonBase, "bg-transparent")}
+				className={cn(
+					buttonBase,
+					"bg-transparent hover:bg-destructive/50",
+				)}
 				onClick={deleteSelected}
 			>
 				<Trash2 />

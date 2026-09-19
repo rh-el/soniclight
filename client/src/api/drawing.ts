@@ -2,6 +2,8 @@ import type {
 	CreateDrawingResponse,
 	Drawing,
 	DrawingsResponse,
+	SaveShapesResponse,
+	Shape,
 } from "../types";
 import { request } from "./client";
 
@@ -24,4 +26,21 @@ export const getDrawings = (username: string) =>
 		"/drawing",
 		{ method: "GET", username },
 		"Failed to load drawings",
+	);
+
+export const saveDrawingShapes = (
+	username: string,
+	drawingId: string,
+	shapes: Shape[],
+) =>
+	request<SaveShapesResponse>(
+		`/drawing/${drawingId}/shapes`,
+		{
+			method: "PUT",
+			username,
+			body: JSON.stringify({
+				shapes: shapes.map(({ id: _id, ...shape }) => shape),
+			}),
+		},
+		"Failed to save drawing",
 	);

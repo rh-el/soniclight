@@ -1,4 +1,4 @@
-import type { EditorShape, ShapeType } from "../types";
+import type { Shape, ShapeType } from "../types";
 
 export const CANVAS_SIZE = 1000;
 export const DEFAULT_SIZE = 100;
@@ -18,7 +18,7 @@ export const COLORS = [
 export const colorHex = (name: string) =>
 	COLORS.find((c) => c.name === name)?.hex ?? "#888";
 
-export const shapeName = (shape: Pick<EditorShape, "type" | "color">) =>
+export const shapeName = (shape: Pick<Shape, "type" | "color">) =>
 	`${shape.type.toLowerCase()}_${shape.color}`;
 
 // bounding box in logical units: rectangle is 2:1, circle and triangle are square.

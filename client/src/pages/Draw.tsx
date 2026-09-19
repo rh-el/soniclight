@@ -5,6 +5,7 @@ import Canvas from "../components/Canvas";
 import LeftPanel from "../components/LeftPanel";
 import Toolbox from "../components/Toolbox";
 import { useEditorStore } from "../state-management/editor";
+import SaveButton from "../components/SaveButton";
 
 export default function Draw() {
 	const drawing = useLoaderData() as Drawing;
@@ -29,8 +30,11 @@ export default function Draw() {
 			<div className="absolute left-4 top-4">
 				<LeftPanel title={drawing.name} />
 			</div>
-			<div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+			<div className="absolute bottom-8 left-1/2 -translate-x-1/2">
 				<Toolbox />
+			</div>
+			<div className="absolute top-2 flex flex-col items-end gap-2 right-2">
+				<SaveButton drawingId={drawing.id} />
 			</div>
 		</div>
 	);
