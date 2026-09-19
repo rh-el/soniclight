@@ -26,8 +26,7 @@ client/src/
 ├── pages/
 ├── components/
 ├── hooks/
-├── models/
-├── queries/
+├── api/
 ├── state-management/
 └── utils/
 ```
@@ -37,12 +36,23 @@ General responsibility:
 - `pages/` — page-level composition and routing concerns
 - `components/` — reusable UI and canvas-related components
 - `hooks/` — reusable React behavior
-- `models/` — frontend domain/types
-- `queries/` — API/data access
+- `api/` — API/data access (see "Frontend API calls")
 - `state-management/` — shared application state where needed
 - `utils/` — small reusable helpers
 
 Prefer keeping state local unless it genuinely needs to be shared.
+
+## Frontend API calls
+
+All HTTP calls to the backend live in `client/src/api/`, never in components or loaders.
+
+- `api/client.ts` exports `request<T>(path, options, fallbackMessage)`. It adds the `apiBaseUrl` + `/api` prefix and JSON headers, sets `X-Username` when `options.username` is passed, and throws `ApiError` (message + HTTP `status`) on a non-OK response, using the server's `{ error }` message when present.
+- One file per resource (`auth.ts`, `home.ts`, ...). Each exports small typed functions that call `request<T>` and return data, e.g. `signup(username)`. They do not catch errors.
+- Response types are declared in `types.ts` and passed as the generic to `request<T>`.
+- Components call these functions in a `try/catch` and only handle UI concerns: show `err.message`, store to `localStorage`, navigate.
+- Loaders (`loaders.ts`) stay thin: call an `api/` function and return its result. Errors propagate to React Router.
+- Pure input validation (e.g. `validateUsername`) lives in `utils/validation.ts`, not in components or `api/` files.
+- To add an endpoint: add a typed function in the matching `api/` file (or a new one), and add its response type to `types.ts`. Nothing else changes.
 
 ## Backend
 
