@@ -30,3 +30,7 @@ export interface DrawingsResponse {
 	username: string;
 	drawings: Drawing[];
 }
+
+export interface CreateDrawingResponse {
+	drawingId: string;
+}
