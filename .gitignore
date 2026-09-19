@@ -4,3 +4,4 @@ build/
 .env.dev
 *.log
 .DS_Store
+*.tsbuildinfo
