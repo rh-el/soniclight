@@ -25,3 +25,8 @@ interface LoginResponse {
 	username: string;
 	drawings: DrawingRecord[];
 }
+
+interface DrawingListResponse {
+	username: string;
+	drawings: DrawingRecord[];
+}

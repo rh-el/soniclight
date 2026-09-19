@@ -1,17 +1,10 @@
 import { createUser, findUserByUsername } from "../crud/user";
-import {
-	InvalidUsernameError,
-	UnknownUserError,
-	UsernameAlreadyExistsError,
-} from "../exceptions";
+import { UsernameAlreadyExistsError } from "../exceptions";
+import { parseUsername, requireUser } from "./auth";
 import { getDrawings } from "./drawing";
 
-const MIN_USERNAME_LENGTH = 3;
-
 export const signup = async (username: unknown): Promise<SignupResponse> => {
-	if (typeof username !== "string") throw new InvalidUsernameError();
-	const trimmed = username.trim();
-	if (trimmed.length < MIN_USERNAME_LENGTH) throw new InvalidUsernameError();
+	const trimmed = parseUsername(username);
 
 	if (await findUserByUsername(trimmed))
 		throw new UsernameAlreadyExistsError();
@@ -21,12 +14,7 @@ export const signup = async (username: unknown): Promise<SignupResponse> => {
 };
 
 export const login = async (username: unknown): Promise<LoginResponse> => {
-	if (typeof username !== "string") throw new InvalidUsernameError();
-	const trimmed = username.trim();
-	if (trimmed.length < MIN_USERNAME_LENGTH) throw new InvalidUsernameError();
-
-	const user = await findUserByUsername(trimmed);
-	if (!user) throw new UnknownUserError();
+	const user = await requireUser(username);
 
 	const drawings = await getDrawings(user.id);
 	return { userId: user.id, username: user.username, drawings };
