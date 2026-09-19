@@ -30,3 +30,7 @@ interface DrawingListResponse {
 	username: string;
 	drawings: DrawingRecord[];
 }
+
+interface CreateDrawingResponse {
+	drawingId: string;
+}

@@ -25,3 +25,15 @@ export class UnknownUserError extends AppError {
 		super(message, 401);
 	}
 }
+
+export class DrawingNotFoundError extends AppError {
+	constructor(message = "Drawing not found") {
+		super(message, 404);
+	}
+}
+
+export class ForbiddenDrawingError extends AppError {
+	constructor(message = "Drawing does not belong to user") {
+		super(message, 403);
+	}
+}
