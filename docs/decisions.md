@@ -60,3 +60,7 @@ The admin gallery can inspect drawings and trigger their audio, but cannot edit,
 ## Scope discipline
 
 The goal is a working, understandable technical-test implementation. Do not add features simply because they might be useful in a production application.
+
+## Errors are raised in services, handled centrally
+
+Services throw `AppError` subclasses; a single error middleware maps them to HTTP responses. Do not add per-route try/catch blocks or set error status codes in route handlers. See `docs/architecture.md`.

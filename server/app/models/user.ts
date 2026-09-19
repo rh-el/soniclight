@@ -1,4 +1,4 @@
-export interface SignupResponse {
+interface SignupResponse {
 	userId: string;
 	username: string;
 }

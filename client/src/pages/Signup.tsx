@@ -6,23 +6,32 @@ import { Card, CardContent, CardFooter } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
-import { USERNAME_KEY } from "../types";
+import { signup } from "../api/auth";
+import { USERID_KEY, USERNAME_KEY } from "../constants";
+import { validateUsername } from "../utils/validation";
 
 export default function Signup() {
 	const [username, setUsername] = useState("");
 	const [error, setError] = useState<string | null>(null);
 	const navigate = useNavigate();
 
-	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		const trimmed = username.trim();
-		if (trimmed.length < 3) {
-			setError("Username should be at least 3 characters");
+		const validationError = validateUsername(username);
+		if (validationError) {
+			setError(validationError);
 			return;
 		}
-		// Username is the only identity (sent as X-Username header).
-		localStorage.setItem(USERNAME_KEY, trimmed);
-		navigate("/");
+		const trimmed = username.trim();
+
+		try {
+			const data = await signup(trimmed);
+			localStorage.setItem(USERNAME_KEY, trimmed);
+			localStorage.setItem(USERID_KEY, data.userId);
+			navigate(`/${data.username}/home`);
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "Failed to create account");
+		}
 	};
 
 	return (
