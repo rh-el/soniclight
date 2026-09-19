@@ -9,7 +9,9 @@ export class AppError extends Error {
 }
 
 export class InvalidUsernameError extends AppError {
-	constructor(message = "Username must be a string of at least 3 characters") {
+	constructor(
+		message = "Username must be a string of at least 3 characters",
+	) {
 		super(message, 400);
 	}
 }
@@ -31,9 +33,20 @@ export class DrawingNotFoundError extends AppError {
 		super(message, 404);
 	}
 }
+export class InvalidDrawingIdError extends AppError {
+	constructor(message = "Invalid drawing ID") {
+		super(message, 400);
+	}
+}
 
 export class ForbiddenDrawingError extends AppError {
 	constructor(message = "Drawing does not belong to user") {
 		super(message, 403);
+	}
+}
+
+export class InvalidShapeError extends AppError {
+	constructor(message = "Invalid shape") {
+		super(message, 400);
 	}
 }

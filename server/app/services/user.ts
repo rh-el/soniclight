@@ -13,7 +13,7 @@ export const signup = async (username: unknown): Promise<SignupResponse> => {
 	return { userId: id, username: trimmed };
 };
 
-export const login = async (username: unknown): Promise<LoginResponse> => {
+export const login = async (username: string | undefined): Promise<LoginResponse> => {
 	const user = await requireUser(username);
 
 	const drawings = await getDrawings(user.id);

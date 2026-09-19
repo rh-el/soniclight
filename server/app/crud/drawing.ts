@@ -12,3 +12,16 @@ export const createDrawing = (userId: string, name: string) =>
 
 export const findDrawingById = (id: string) =>
 	prisma.drawing.findUnique({ where: { id }, include: { shapes: true } });
+
+export const replaceDrawingShapes = async (
+	drawingId: string,
+	shapes: ShapeInput[],
+) => {
+	const [, created] = await prisma.$transaction([
+		prisma.shape.deleteMany({ where: { drawingId } }),
+		prisma.shape.createMany({
+			data: shapes.map((shape) => ({ ...shape, drawingId })),
+		}),
+	]);
+	return created.count;
+};
