@@ -1,14 +1,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronUp, SquarePen } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import ShapeList from "./ShapeList";
 import { useEditorStore } from "../state-management/editor";
 import { USERNAME_KEY } from "../constants";
+import DrawingInformationsDialog from "./DrawingInformationsDialog";
 
-export default function LeftPanel({ title }: { title: string }) {
+export default function LeftPanel({
+	title: initialTitle,
+	drawingId,
+}: {
+	title: string;
+	drawingId: string;
+}) {
 	const [isOpen, setIsOpen] = useState(true);
+	const [title, setTitle] = useState(initialTitle);
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const navigate = useNavigate();
 	const hasShapes = useEditorStore((s) => s.shapes.length > 0);
 
@@ -37,7 +46,24 @@ export default function LeftPanel({ title }: { title: string }) {
 					{isOpen ? <ChevronUp /> : <ChevronDown />}
 				</Button>
 			</div>
-			<h2>{title}</h2>
+			<div className="flex items-center justify-between">
+				<h2 className="pl-2">{title}</h2>
+				<Button
+					onClick={() => setIsDialogOpen(true)}
+					variant="ghost"
+					size="icon"
+					className="cursor-pointer"
+				>
+					<SquarePen size={16} className="cursor-pointer" />
+				</Button>
+			</div>
+			<DrawingInformationsDialog
+				open={isDialogOpen}
+				onOpenChange={setIsDialogOpen}
+				drawingId={drawingId}
+				currentName={title}
+				onSaved={setTitle}
+			/>
 			{isOpen && hasShapes && (
 				<>
 					<Separator />

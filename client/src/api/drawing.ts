@@ -2,6 +2,7 @@ import type {
 	CreateDrawingResponse,
 	Drawing,
 	DrawingsResponse,
+	RenameDrawingResponse,
 	SaveShapesResponse,
 	Shape,
 } from "../types";
@@ -43,4 +44,15 @@ export const saveDrawingShapes = (
 			}),
 		},
 		"Failed to save drawing",
+	);
+
+export const renameDrawing = (
+	username: string,
+	drawingId: string,
+	name: string,
+) =>
+	request<RenameDrawingResponse>(
+		`/drawing/${drawingId}`,
+		{ method: "PATCH", username, body: JSON.stringify({ name }) },
+		"Failed to rename drawing",
 	);

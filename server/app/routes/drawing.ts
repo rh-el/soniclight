@@ -3,6 +3,7 @@ import {
 	createDrawing,
 	getOwnedDrawing,
 	listUserDrawings,
+	renameDrawing,
 	saveDrawingShapes,
 } from "../services/drawing";
 
@@ -29,5 +30,10 @@ drawingRouter.put("/:id/shapes", async (req, res) => {
 		req.params.id,
 		req.body?.shapes,
 	);
+	res.json(result);
+});
+
+drawingRouter.patch("/:id", async (req, res) => {
+	const result = await renameDrawing(req.username, req.params.id, req.body?.name);
 	res.json(result);
 });

@@ -13,6 +13,9 @@ export const createDrawing = (userId: string, name: string) =>
 export const findDrawingById = (id: string) =>
 	prisma.drawing.findUnique({ where: { id }, include: { shapes: true } });
 
+export const updateDrawingName = (id: string, name: string) =>
+	prisma.drawing.update({ where: { id }, data: { name } });
+
 export const replaceDrawingShapes = async (
 	drawingId: string,
 	shapes: ShapeInput[],

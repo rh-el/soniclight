@@ -49,3 +49,8 @@ export interface SaveShapesResponse {
 	drawingId: string;
 	shapeCount: number;
 }
+
+export interface RenameDrawingResponse {
+	drawingId: string;
+	name: string;
+}
