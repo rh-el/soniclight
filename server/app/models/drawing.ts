@@ -19,3 +19,8 @@ interface SaveShapesResponse {
 	drawingId: string;
 	shapeCount: number;
 }
+
+interface RenameDrawingResponse {
+	drawingId: string;
+	name: string;
+}

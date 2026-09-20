@@ -50,3 +50,9 @@ export class InvalidShapeError extends AppError {
 		super(message, 400);
 	}
 }
+
+export class InvalidDrawingNameError extends AppError {
+	constructor(message = "Drawing name must be at least 2 characters") {
+		super(message, 400);
+	}
+}

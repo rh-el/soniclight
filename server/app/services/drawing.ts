@@ -3,16 +3,19 @@ import {
 	findDrawingById,
 	findDrawingsByUserId,
 	replaceDrawingShapes,
+	updateDrawingName,
 } from "../crud/drawing";
 import {
 	DrawingNotFoundError,
 	ForbiddenDrawingError,
 	InvalidDrawingIdError,
+	InvalidDrawingNameError,
 	InvalidShapeError,
 } from "../exceptions";
 import { requireUser } from "./auth";
 
 const DEFAULT_DRAWING_NAME = "Untitled drawing";
+const DRAWING_NAME_MIN_LENGTH = 2;
 const UUID_REGEX =
 	/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -111,4 +114,18 @@ export const saveDrawingShapes = async (
 	const parsed = shapes.map(parseShape);
 	const shapeCount = await replaceDrawingShapes(drawing.id, parsed);
 	return { drawingId: drawing.id, shapeCount };
+};
+
+export const renameDrawing = async (
+	username: string | undefined,
+	drawingId: string,
+	name: unknown,
+): Promise<RenameDrawingResponse> => {
+	const drawing = await getOwnedDrawing(username, drawingId);
+
+	if (typeof name !== "string" || name.trim().length < DRAWING_NAME_MIN_LENGTH) {
+		throw new InvalidDrawingNameError();
+	}
+	const updated = await updateDrawingName(drawing.id, name.trim());
+	return { drawingId: updated.id, name: updated.name };
 };
