@@ -1,6 +1,7 @@
 export interface SignupResponse {
 	userId: string;
 	username: string;
+	isAdmin: boolean;
 }
 
 export type ShapeType = "CIRCLE" | "RECTANGLE" | "TRIANGLE";
@@ -33,6 +34,7 @@ export interface Drawing {
 export interface LoginResponse {
 	userId: string;
 	username: string;
+	isAdmin: boolean;
 	drawings: Drawing[];
 }
 
@@ -53,4 +55,16 @@ export interface SaveShapesResponse {
 export interface RenameDrawingResponse {
 	drawingId: string;
 	name: string;
+}
+
+export interface AdminDrawingSummary {
+	id: string;
+	name: string;
+	ownerUsername: string;
+	shapeCount: number;
+	updatedAt: string;
+}
+
+export interface AdminDrawingsResponse {
+	drawings: AdminDrawingSummary[];
 }

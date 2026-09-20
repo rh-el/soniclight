@@ -24,3 +24,15 @@ interface RenameDrawingResponse {
 	drawingId: string;
 	name: string;
 }
+
+interface AdminDrawingSummary {
+	id: string;
+	name: string;
+	ownerUsername: string;
+	shapeCount: number;
+	updatedAt: Date;
+}
+
+interface AdminDrawingListResponse {
+	drawings: AdminDrawingSummary[];
+}

@@ -16,7 +16,7 @@ import { requireUser } from "./auth";
 
 const DEFAULT_DRAWING_NAME = "Untitled drawing";
 const DRAWING_NAME_MIN_LENGTH = 2;
-const UUID_REGEX =
+export const UUID_REGEX =
 	/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export const getDrawings = (userId: string) => findDrawingsByUserId(userId);

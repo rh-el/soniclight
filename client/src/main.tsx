@@ -6,13 +6,36 @@ import "../index.css";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Draw from "./pages/Draw";
-import { drawLoader, homeLoader, redirectIfLoggedInLoader } from "./loaders";
+import Layout from "./pages/Layout";
+import Admin from "./pages/Admin";
+import {
+	adminDrawingLoader,
+	adminLoader,
+	drawLoader,
+	homeLoader,
+	redirectIfLoggedInLoader,
+} from "./loaders";
 
 const router = createBrowserRouter([
 	{
-		path: "/:username/home",
-		loader: homeLoader,
-		element: <Home />,
+		element: <Layout />,
+		children: [
+			{
+				path: "/:username/home",
+				loader: homeLoader,
+				element: <Home />,
+			},
+			{
+				path: "/:username/gallery",
+				loader: adminLoader,
+				element: <Admin />,
+			},
+		],
+	},
+	{
+		path: "/admin/drawing/:drawid",
+		loader: adminDrawingLoader,
+		element: <Draw readOnly />,
 	},
 	{
 		path: "/:username/draw/:drawid",

@@ -25,6 +25,7 @@ input:-webkit-autofill:active {
 }
 
 html {
+	color-scheme: dark;
 	box-sizing: border-box;
 	overflow-x: hidden;
 	background-color: var(--color-background);
@@ -34,23 +35,24 @@ body {
 	background-color: var(--color-background);
 }
 
-.app-layout-scroll {
-	scrollbar-gutter: stable;
-	scrollbar-color: var(--border) var(--background);
+* {
+	scrollbar-color: var(--input) transparent;
 }
 
-.app-layout-scroll::-webkit-scrollbar {
+*::-webkit-scrollbar {
 	width: 10px;
+	height: 10px;
 }
 
-.app-layout-scroll::-webkit-scrollbar-track {
-	background: var(--background);
+*::-webkit-scrollbar-track {
+	background: transparent;
 }
 
-.app-layout-scroll::-webkit-scrollbar-thumb {
-	background: var(--border);
+*::-webkit-scrollbar-thumb {
+	background: var(--input);
 	border-radius: 9999px;
-	border: 2px solid var(--background);
+	border: 2px solid transparent;
+	background-clip: padding-box;
 }
 
 :root {

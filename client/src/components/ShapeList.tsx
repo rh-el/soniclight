@@ -4,7 +4,7 @@ import { shapeName } from "../utils/shapes";
 
 const baseItemStyle = "rounded-md py-2 text-xs transition-[padding_color] h-8";
 
-export default function ShapeList() {
+export default function ShapeList({ readOnly = false }: { readOnly?: boolean }) {
 	const shapes = useEditorStore((s) => s.shapes);
 	const selectedId = useEditorStore((s) => s.selectedId);
 	const select = useEditorStore((s) => s.select);
@@ -16,12 +16,12 @@ export default function ShapeList() {
 					key={shape.id}
 					className={cn(
 						baseItemStyle,
-						"cursor-pointer",
+						!readOnly && "cursor-pointer",
 						selectedId === shape.id
 							? "bg-primary-light/10 px-4 text-primary-light"
 							: "px-2 hover:bg-border/20",
 					)}
-					onClick={() => select(shape.id)}
+					onClick={readOnly ? undefined : () => select(shape.id)}
 				>
 					{shapeName(shape)}
 				</li>

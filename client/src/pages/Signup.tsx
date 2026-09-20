@@ -7,7 +7,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
 import { signup } from "../api/auth";
-import { USERID_KEY, USERNAME_KEY } from "../constants";
+import { ISADMIN_KEY, USERID_KEY, USERNAME_KEY } from "../constants";
 import { validateUsername } from "../utils/validation";
 
 export default function Signup() {
@@ -28,6 +28,7 @@ export default function Signup() {
 			const data = await signup(trimmed);
 			localStorage.setItem(USERNAME_KEY, trimmed);
 			localStorage.setItem(USERID_KEY, data.userId);
+			localStorage.setItem(ISADMIN_KEY, String(data.isAdmin));
 			navigate(`/${data.username}/home`);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Failed to create account");
