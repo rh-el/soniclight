@@ -3,9 +3,7 @@ import { DrawingNotFoundError, InvalidDrawingIdError } from "../exceptions";
 import { requireAdmin } from "./auth";
 import { UUID_REGEX } from "./drawing";
 
-export const listAllDrawings = async (
-	username: string | undefined,
-): Promise<AdminDrawingListResponse> => {
+export const listAllDrawings = async (username: string | undefined): Promise<AdminDrawingListResponse> => {
 	await requireAdmin(username);
 	const drawings = await findAllDrawingSummaries();
 	return {
@@ -19,10 +17,7 @@ export const listAllDrawings = async (
 	};
 };
 
-export const getAnyDrawing = async (
-	username: string | undefined,
-	drawingId: string,
-) => {
+export const getAnyDrawing = async (username: string | undefined, drawingId: string) => {
 	if (!UUID_REGEX.test(drawingId)) {
 		throw new InvalidDrawingIdError();
 	}

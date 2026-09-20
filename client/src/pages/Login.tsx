@@ -63,18 +63,11 @@ export default function Login() {
 									required
 									aria-invalid={Boolean(error)}
 								/>
-								{error && (
-									<p className="text-sm text-destructive">
-										{error}
-									</p>
-								)}
+								{error && <p className="text-sm text-destructive">{error}</p>}
 							</CardContent>
 
 							<CardFooter className="flex flex-col gap-3 pt-2">
-								<Button
-									type="submit"
-									className="w-full font-mono"
-								>
+								<Button type="submit" className="w-full font-mono">
 									enter
 								</Button>
 								<Button

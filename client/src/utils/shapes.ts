@@ -15,11 +15,9 @@ export const COLORS = [
 	{ name: "e", hex: "#9381FF" },
 ];
 
-export const colorHex = (name: string) =>
-	COLORS.find((c) => c.name === name)?.hex ?? "#888";
+export const colorHex = (name: string) => COLORS.find((c) => c.name === name)?.hex ?? "#888";
 
-export const shapeName = (shape: Pick<Shape, "type" | "color">) =>
-	`${shape.type.toLowerCase()}_${shape.color}`;
+export const shapeName = (shape: Pick<Shape, "type" | "color">) => `${shape.type.toLowerCase()}_${shape.color}`;
 
 // bounding box in logical units: rectangle is 2:1, circle and triangle are square.
 export const shapeExtent = (type: ShapeType, size: number) => ({
@@ -27,21 +25,14 @@ export const shapeExtent = (type: ShapeType, size: number) => ({
 	height: type === "RECTANGLE" ? size / 2 : size,
 });
 
-const clamp = (value: number, min: number, max: number) =>
-	Math.min(Math.max(value, min), max);
+const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
 export const MAX_ROTATION = 359;
 
 export const canRotate = (type: ShapeType) => type !== "CIRCLE";
 
 // keep the whole shape inside the canvas (including its rotated bounding box).
-export const clampCenter = (
-	type: ShapeType,
-	size: number,
-	x: number,
-	y: number,
-	rotation = 0,
-) => {
+export const clampCenter = (type: ShapeType, size: number, x: number, y: number, rotation = 0) => {
 	const { width, height } = shapeExtent(type, size);
 	const rad = (rotation * Math.PI) / 180;
 	const cos = Math.cos(rad);

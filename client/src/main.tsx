@@ -8,13 +8,7 @@ import Signup from "./pages/Signup";
 import Draw from "./pages/Draw";
 import Layout from "./pages/Layout";
 import Admin from "./pages/Admin";
-import {
-	adminDrawingLoader,
-	adminLoader,
-	drawLoader,
-	homeLoader,
-	redirectIfLoggedInLoader,
-} from "./loaders";
+import { adminDrawingLoader, adminLoader, drawLoader, homeLoader, redirectIfLoggedInLoader } from "./loaders";
 
 const router = createBrowserRouter([
 	{

@@ -2,13 +2,7 @@ import { useEffect, useRef } from "react";
 import p5 from "p5";
 import { useEditorStore } from "../state-management/editor";
 import type { Shape, ShapeType } from "../types";
-import {
-	CANVAS_SIZE,
-	DEFAULT_SIZE,
-	clampCenter,
-	colorHex,
-	shapeExtent,
-} from "../utils/shapes";
+import { CANVAS_SIZE, DEFAULT_SIZE, clampCenter, colorHex, shapeExtent } from "../utils/shapes";
 
 type Drawable = Pick<Shape, "type" | "color" | "size" | "rotation"> & {
 	x: number;
@@ -28,15 +22,7 @@ function drawShape(p: p5, shape: Drawable, alpha = 255) {
 		p.circle(0, 0, shape.size);
 	} else if (shape.type === "RECTANGLE") {
 		p.rect(-width / 2, -height / 2, width, height);
-	} else
-		p.triangle(
-			0,
-			-height / 2,
-			width / 2,
-			height / 2,
-			-width / 2,
-			height / 2,
-		);
+	} else p.triangle(0, -height / 2, width / 2, height / 2, -width / 2, height / 2);
 	p.pop();
 }
 
@@ -64,9 +50,7 @@ function hitTest(shape: Shape, px: number, py: number) {
 }
 
 const topShapeAt = (x: number, y: number) =>
-	[...useEditorStore.getState().shapes]
-		.sort((a, b) => b.z - a.z)
-		.find((s) => hitTest(s, x, y));
+	[...useEditorStore.getState().shapes].sort((a, b) => b.z - a.z).find((s) => hitTest(s, x, y));
 
 export default function Canvas({ readOnly = false }: { readOnly?: boolean }) {
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -93,20 +77,13 @@ export default function Canvas({ readOnly = false }: { readOnly?: boolean }) {
 				y: (p.mouseY - offsetY) / scale,
 			});
 
-			const isOnCanvas = (e: Event) =>
-				e.target ===
-				(p as unknown as { canvas: HTMLCanvasElement }).canvas;
+			const isOnCanvas = (e: Event) => e.target === (p as unknown as { canvas: HTMLCanvasElement }).canvas;
 
 			p.setup = () => {
 				const { w, h } = layout();
 				const canvas = p.createCanvas(w, h);
 				canvas.parent(container);
-				canvas.elt.classList.add(
-					"bg-background",
-					"touch-none",
-					"p-4",
-					"radius-xl",
-				);
+				canvas.elt.classList.add("bg-background", "touch-none", "p-4", "radius-xl");
 				new ResizeObserver(() => {
 					const { w, h } = layout();
 					p.resizeCanvas(w, h);
@@ -114,8 +91,7 @@ export default function Canvas({ readOnly = false }: { readOnly?: boolean }) {
 			};
 
 			p.draw = () => {
-				const { shapes, mode, pendingType, pendingColor, selectedId } =
-					useEditorStore.getState();
+				const { shapes, mode, pendingType, pendingColor, selectedId } = useEditorStore.getState();
 				const cursor = toLogical();
 				p.clear();
 				p.translate(offsetX, offsetY);
@@ -141,23 +117,9 @@ export default function Canvas({ readOnly = false }: { readOnly?: boolean }) {
 				}
 
 				p.noStroke();
-				const overCanvas =
-					p.mouseX >= 0 &&
-					p.mouseY >= 0 &&
-					p.mouseX <= p.width &&
-					p.mouseY <= p.height;
-				if (
-					mode === "color-selected" &&
-					pendingType &&
-					pendingColor &&
-					overCanvas
-				) {
-					const c = clampCenter(
-						pendingType as ShapeType,
-						DEFAULT_SIZE,
-						cursor.x,
-						cursor.y,
-					);
+				const overCanvas = p.mouseX >= 0 && p.mouseY >= 0 && p.mouseX <= p.width && p.mouseY <= p.height;
+				if (mode === "color-selected" && pendingType && pendingColor && overCanvas) {
+					const c = clampCenter(pendingType as ShapeType, DEFAULT_SIZE, cursor.x, cursor.y);
 					drawShape(
 						p,
 						{
@@ -171,13 +133,8 @@ export default function Canvas({ readOnly = false }: { readOnly?: boolean }) {
 					);
 				}
 
-				(
-					p as unknown as { canvas: HTMLCanvasElement }
-				).canvas.style.cursor =
-					!readOnly &&
-					mode !== "color-selected" &&
-					overCanvas &&
-					topShapeAt(cursor.x, cursor.y)
+				(p as unknown as { canvas: HTMLCanvasElement }).canvas.style.cursor =
+					!readOnly && mode !== "color-selected" && overCanvas && topShapeAt(cursor.x, cursor.y)
 						? "pointer"
 						: "default";
 			};
@@ -187,8 +144,7 @@ export default function Canvas({ readOnly = false }: { readOnly?: boolean }) {
 					return;
 				}
 
-				const { mode, place, select, cancel } =
-					useEditorStore.getState();
+				const { mode, place, select, cancel } = useEditorStore.getState();
 				const { x, y } = toLogical();
 
 				if (mode === "color-selected") {
@@ -215,9 +171,7 @@ export default function Canvas({ readOnly = false }: { readOnly?: boolean }) {
 				}
 
 				const { x, y } = toLogical();
-				useEditorStore
-					.getState()
-					.moveShape(drag.id, x + drag.dx, y + drag.dy);
+				useEditorStore.getState().moveShape(drag.id, x + drag.dx, y + drag.dy);
 			};
 
 			p.mouseReleased = () => {

@@ -31,20 +31,10 @@ export default function LeftPanel({
 	return (
 		<div className="flex w-64 flex-col gap-4 rounded-xl border border-border bg-background/90 p-3 text-foreground font-mono">
 			<div className="flex items-center justify-between">
-				<Button
-					onClick={goHome}
-					variant="ghost"
-					size="icon"
-					className="cursor-pointer"
-				>
+				<Button onClick={goHome} variant="ghost" size="icon" className="cursor-pointer">
 					<ArrowLeft />
 				</Button>
-				<Button
-					onClick={() => setIsOpen(!isOpen)}
-					variant="ghost"
-					size="icon"
-					className="cursor-pointer"
-				>
+				<Button onClick={() => setIsOpen(!isOpen)} variant="ghost" size="icon" className="cursor-pointer">
 					{isOpen ? <ChevronUp /> : <ChevronDown />}
 				</Button>
 			</div>

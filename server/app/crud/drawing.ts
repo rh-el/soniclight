@@ -10,16 +10,11 @@ export const findDrawingsByUserId = (userId: string) =>
 export const createDrawing = (userId: string, name: string) =>
 	prisma.drawing.create({ data: { userId, name }, include: { shapes: true } });
 
-export const findDrawingById = (id: string) =>
-	prisma.drawing.findUnique({ where: { id }, include: { shapes: true } });
+export const findDrawingById = (id: string) => prisma.drawing.findUnique({ where: { id }, include: { shapes: true } });
 
-export const updateDrawingName = (id: string, name: string) =>
-	prisma.drawing.update({ where: { id }, data: { name } });
+export const updateDrawingName = (id: string, name: string) => prisma.drawing.update({ where: { id }, data: { name } });
 
-export const replaceDrawingShapes = async (
-	drawingId: string,
-	shapes: ShapeInput[],
-) => {
+export const replaceDrawingShapes = async (drawingId: string, shapes: ShapeInput[]) => {
 	const [, created] = await prisma.$transaction([
 		prisma.shape.deleteMany({ where: { drawingId } }),
 		prisma.shape.createMany({

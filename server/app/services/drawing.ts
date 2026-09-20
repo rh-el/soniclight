@@ -16,22 +16,17 @@ import { requireUser } from "./auth";
 
 const DEFAULT_DRAWING_NAME = "Untitled drawing";
 const DRAWING_NAME_MIN_LENGTH = 2;
-export const UUID_REGEX =
-	/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+export const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export const getDrawings = (userId: string) => findDrawingsByUserId(userId);
 
-export const listUserDrawings = async (
-	username: string | undefined,
-): Promise<DrawingListResponse> => {
+export const listUserDrawings = async (username: string | undefined): Promise<DrawingListResponse> => {
 	const user = await requireUser(username);
 	const drawings = await getDrawings(user.id);
 	return { username: user.username, drawings };
 };
 
-export const createDrawing = async (
-	username: string | undefined,
-): Promise<CreateDrawingResponse> => {
+export const createDrawing = async (username: string | undefined): Promise<CreateDrawingResponse> => {
 	const user = await requireUser(username);
 	const drawing = await insertDrawing(user.id, DEFAULT_DRAWING_NAME);
 	return { drawingId: drawing.id };
@@ -62,10 +57,7 @@ const MAX_SIZE = 400;
 const MAX_ROTATION = 359;
 
 const isNumberInRange = (value: unknown, min: number, max: number) =>
-	typeof value === "number" &&
-	Number.isFinite(value) &&
-	value >= min &&
-	value <= max;
+	typeof value === "number" && Number.isFinite(value) && value >= min && value <= max;
 
 const parseShape = (raw: unknown): ShapeInput => {
 	const s = (raw ?? {}) as Record<string, unknown>;

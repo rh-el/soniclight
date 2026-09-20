@@ -25,11 +25,7 @@ drawingRouter.get("/:id", async (req, res) => {
 });
 
 drawingRouter.put("/:id/shapes", async (req, res) => {
-	const result = await saveDrawingShapes(
-		req.username,
-		req.params.id,
-		req.body?.shapes,
-	);
+	const result = await saveDrawingShapes(req.username, req.params.id, req.body?.shapes);
 	res.json(result);
 });
 

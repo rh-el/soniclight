@@ -9,31 +9,15 @@ import type {
 import { request } from "./client";
 
 export const createDrawing = (username: string) =>
-	request<CreateDrawingResponse>(
-		"/drawing",
-		{ method: "POST", username },
-		"Failed to create drawing",
-	);
+	request<CreateDrawingResponse>("/drawing", { method: "POST", username }, "Failed to create drawing");
 
 export const getDrawing = (username: string, drawingId: string) =>
-	request<Drawing>(
-		`/drawing/${drawingId}`,
-		{ method: "GET", username },
-		"Failed to load drawing",
-	);
+	request<Drawing>(`/drawing/${drawingId}`, { method: "GET", username }, "Failed to load drawing");
 
 export const getDrawings = (username: string) =>
-	request<DrawingsResponse>(
-		"/drawing",
-		{ method: "GET", username },
-		"Failed to load drawings",
-	);
+	request<DrawingsResponse>("/drawing", { method: "GET", username }, "Failed to load drawings");
 
-export const saveDrawingShapes = (
-	username: string,
-	drawingId: string,
-	shapes: Shape[],
-) =>
+export const saveDrawingShapes = (username: string, drawingId: string, shapes: Shape[]) =>
 	request<SaveShapesResponse>(
 		`/drawing/${drawingId}/shapes`,
 		{
@@ -46,11 +30,7 @@ export const saveDrawingShapes = (
 		"Failed to save drawing",
 	);
 
-export const renameDrawing = (
-	username: string,
-	drawingId: string,
-	name: string,
-) =>
+export const renameDrawing = (username: string, drawingId: string, name: string) =>
 	request<RenameDrawingResponse>(
 		`/drawing/${drawingId}`,
 		{ method: "PATCH", username, body: JSON.stringify({ name }) },

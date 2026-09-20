@@ -18,9 +18,7 @@ export default function Home() {
 			const { drawingId } = await createDrawing(username);
 			navigate(`/${username}/draw/${drawingId}`);
 		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : "Failed to create drawing",
-			);
+			setError(err instanceof Error ? err.message : "Failed to create drawing");
 			setIsCreating(false);
 		}
 	};
@@ -40,16 +38,8 @@ export default function Home() {
 						create
 					</Button>
 				</div>
-				{error && (
-					<p className="w-full font-mono text-sm text-destructive">
-						{error}
-					</p>
-				)}
-				<CardsContainer
-					username={username}
-					drawings={drawings}
-					onCreate={create}
-				/>
+				{error && <p className="w-full font-mono text-sm text-destructive">{error}</p>}
+				<CardsContainer username={username} drawings={drawings} onCreate={create} />
 			</div>
 		</div>
 	);
