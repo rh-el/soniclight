@@ -23,9 +23,7 @@ export const saveDrawingShapes = (username: string, drawingId: string, shapes: S
 		{
 			method: "PUT",
 			username,
-			body: JSON.stringify({
-				shapes: shapes.map(({ id: _id, ...shape }) => shape),
-			}),
+			body: JSON.stringify({ shapes }),
 		},
 		"Failed to save drawing",
 	);
