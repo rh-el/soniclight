@@ -8,11 +8,11 @@ export const MAX_SIZE = 400;
 export const SHAPE_TYPES: ShapeType[] = ["CIRCLE", "RECTANGLE", "TRIANGLE"];
 
 export const COLORS = [
-	{ name: "red", hex: "#BB342F" },
-	{ name: "orange", hex: "#E8B9AB" },
-	{ name: "green", hex: "#A1E8AF" },
-	{ name: "blue", hex: "#124E78" },
-	{ name: "purple", hex: "#9381FF" },
+	{ name: "a", hex: "#BB342F" },
+	{ name: "b", hex: "#E8B9AB" },
+	{ name: "c", hex: "#A1E8AF" },
+	{ name: "d", hex: "#124E78" },
+	{ name: "e", hex: "#9381FF" },
 ];
 
 export const colorHex = (name: string) =>

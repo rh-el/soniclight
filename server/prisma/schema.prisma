@@ -14,11 +14,11 @@ enum ShapeType {
 }
 
 enum ShapeColor {
-  red
-  orange
-  green
-  blue
-  purple
+  a
+  b
+  c
+  d
+  e
 }
 
 model User {

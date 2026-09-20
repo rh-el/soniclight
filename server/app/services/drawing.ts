@@ -52,7 +52,7 @@ export const getOwnedDrawing = async (username: string | undefined, drawingId: s
 };
 
 const SHAPE_TYPES = ["CIRCLE", "RECTANGLE", "TRIANGLE"] as const;
-const SHAPE_COLORS = ["red", "orange", "green", "blue", "purple"] as const;
+const SHAPE_COLORS = ["a", "b", "c", "d", "e"] as const;
 const CANVAS_SIZE = 1000;
 const MIN_SIZE = 40;
 const MAX_SIZE = 400;

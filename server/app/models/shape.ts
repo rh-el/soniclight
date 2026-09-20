@@ -1,6 +1,6 @@
 interface ShapeInput {
 	type: "CIRCLE" | "RECTANGLE" | "TRIANGLE";
-	color: "red" | "orange" | "green" | "blue" | "purple";
+	color: "a" | "b" | "c" | "d" | "e";
 	positionX: number;
 	positionY: number;
 	size: number;
