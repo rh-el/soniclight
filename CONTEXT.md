@@ -46,6 +46,17 @@ Which shape appears in front of which. Selecting a shape, or placing a new one, 
 The left-panel list of a drawing's shapes by name, in creation order, used to select a shape.
 _Avoid_: area list
 
+**Admin**:
+The one seeded user allowed to consult every user's drawings, read-only. Identified by the reserved username "admin".
+_Avoid_: moderator, superuser
+
+**Gallery**:
+The admin's view listing all users' drawings, each shown with its owner and shape count.
+_Avoid_: dashboard
+
+**Viewer**:
+The read-only display of a drawing that the admin opens from the gallery. Nothing can be placed, selected, resized or deleted in it.
+
 ## Editor modes
 
 - **Base**: nothing selected or pending.
