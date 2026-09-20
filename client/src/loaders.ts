@@ -11,10 +11,19 @@ const logoutRedirect = () => {
 	return redirect("/login");
 };
 
-export const homeLoader = async () => {
+const ownUrlRedirect = (params: LoaderFunctionArgs["params"], username: string, request: Request) =>
+	params.username && params.username !== username
+		? redirect(new URL(request.url).pathname.replace(`/${params.username}/`, `/${username}/`))
+		: null;
+
+export const homeLoader = async ({ params, request }: LoaderFunctionArgs) => {
 	const username = localStorage.getItem(USERNAME_KEY);
 	if (!username) {
 		throw redirect("/login");
+	}
+	const own = ownUrlRedirect(params, username, request);
+	if (own) {
+		throw own;
 	}
 	try {
 		return await getDrawings(username);
@@ -26,10 +35,14 @@ export const homeLoader = async () => {
 	}
 };
 
-export const drawLoader = async ({ params }: LoaderFunctionArgs) => {
+export const drawLoader = async ({ params, request }: LoaderFunctionArgs) => {
 	const username = localStorage.getItem(USERNAME_KEY);
 	if (!username) {
 		throw redirect("/login");
+	}
+	const own = ownUrlRedirect(params, username, request);
+	if (own) {
+		throw own;
 	}
 	try {
 		return await getDrawing(username, params.drawid ?? "");
@@ -51,10 +64,14 @@ const notAdminRedirect = (username: string) => {
 	return redirect(`/${username}/home`);
 };
 
-export const adminLoader = async () => {
+export const adminLoader = async ({ params, request }: LoaderFunctionArgs) => {
 	const username = localStorage.getItem(USERNAME_KEY);
 	if (!username) {
 		throw redirect("/login");
+	}
+	const own = ownUrlRedirect(params, username, request);
+	if (own) {
+		throw own;
 	}
 	try {
 		return await getAllDrawings(username);
