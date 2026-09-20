@@ -1,8 +1,9 @@
 # SonicLight
 
-SonicLight is a browser-based generative sound composition tool.
+SonicLight is a browser-based generative sound composition tool. It allows creating soundscape with a binaural audio engine.
 
-Users identify themselves with a username only, then compose by dropping shapes on a canvas. Each shape is a voice: its position sets stereo pan and volume, its size sets reverb, and its color picks the sample. All voices play together as an ambient loop.
+Users identify themselves with a username only, then compose by dropping shapes on a canvas.
+Each shape is a voice: its position sets 3D position (the listening position is set at the center of the canvas facing the top middle), its size sets volume, and its color picks the sample. All voices play together as an ambient loop.
 
 An admin user can browse a read-only gallery of every user's drawings and play them back.
 
