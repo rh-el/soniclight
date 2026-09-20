@@ -29,7 +29,7 @@ export default function Draw() {
 		<div className="relative h-dvh w-full overflow-hidden bg-background">
 			<Canvas />
 			<div className="absolute left-4 top-4">
-				<LeftPanel title={drawing.name} />
+				<LeftPanel title={drawing.name} drawingId={drawing.id} />
 			</div>
 			<div className="absolute bottom-8 left-1/2 -translate-x-1/2">
 				<Toolbox />
