@@ -28,3 +28,15 @@ export const replaceDrawingShapes = async (
 	]);
 	return created.count;
 };
+
+export const findAllDrawingSummaries = () =>
+	prisma.drawing.findMany({
+		select: {
+			id: true,
+			name: true,
+			updatedAt: true,
+			user: { select: { username: true } },
+			_count: { select: { shapes: true } },
+		},
+		orderBy: { updatedAt: "desc" },
+	});

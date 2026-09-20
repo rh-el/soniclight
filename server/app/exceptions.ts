@@ -28,6 +28,18 @@ export class UnknownUserError extends AppError {
 	}
 }
 
+export class ReservedUsernameError extends AppError {
+	constructor(message = "Username is reserved") {
+		super(message, 409);
+	}
+}
+
+export class ForbiddenAdminError extends AppError {
+	constructor(message = "Admin access required") {
+		super(message, 403);
+	}
+}
+
 export class DrawingNotFoundError extends AppError {
 	constructor(message = "Drawing not found") {
 		super(message, 404);
