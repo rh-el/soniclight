@@ -31,11 +31,11 @@ export default function Draw({ readOnly = false }: { readOnly?: boolean }) {
 			<div className="absolute left-4 top-4">
 				<LeftPanel title={drawing.name} drawingId={drawing.id} readOnly={readOnly} />
 			</div>
+			<div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+				<Toolbox readOnly={readOnly} />
+			</div>
 			{!readOnly && (
 				<>
-					<div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-						<Toolbox />
-					</div>
 					<div className="absolute top-2 flex flex-col items-end gap-2 right-2">
 						<SaveButton drawingId={drawing.id} />
 					</div>
