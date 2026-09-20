@@ -63,16 +63,9 @@ Use the Web Audio API.
 - Shape angle relative to canvas center maps to stereo pan.
 - Shape distance from canvas center maps to volume and/or send.
 - Shape color selects the sample variation.
-- Shape area maps to reverb.
+- Shape distance from canvas center also maps to reverb (further = more reverb). Shape size maps to volume (bigger = louder).
 
-There is a maximum of 16 simultaneous voices.
-
-If the limit is exceeded, the implementation may either:
-
-- drop the oldest / lowest-priority voice, or
-- scale down master gain.
-
-The exact voice-cap behavior is an implementation decision.
+All voices can play together
 
 ## 6. Admin
 

@@ -27,7 +27,7 @@ scene the user builds by placing and sizing shapes.
   (e.g. `padA`…`padE`, `voiceA`…`voiceE`, `textureA`…`textureE`). 15 samples total.
 - Interaction: click to drop a shape at fixed default size, then resize it. Clicking a shape
   brings it to the top of the z-order. No freehand drawing.
-- Shape size (area) maps to reverb size; color maps to sample variation. Position maps to spatial
+- Color maps to sample variation; the bigger the shape, the louder it plays. Position maps to spatial
   audio (see below).
 
 ## Coordinate system
@@ -54,14 +54,20 @@ A drawing = a user-owned collection of shape records.
 - Sample-based, one audio voice per shape.
 - Playback is **simultaneous**: all shapes in a drawing sound together as an ambient/drone
   loop (each sample plays in loop mode), not sequenced by draw order.
+- Output is **binaural** (headphones): each voice is a `PannerNode` in HRTF mode, placed in 3D
+  around a listener at the canvas center, facing the top of the canvas.
 - Per-voice parameters derived from the shape:
-    - **Angle from canvas center** → stereo pan (`StereoPannerNode`).
-    - **Distance from canvas center** → volume / send level (further = quieter or more wet).
+    - **Offset from canvas center** → 3D position: left/right as on screen, canvas up = front,
+      canvas down = behind, flat plane (no elevation).
+    - **Distance from canvas center** → volume (custom distance curve, near-inaudible dry signal
+      at the far corner) and reverb send (further = more reverb). A shape at the exact center is
+      kept at a small minimum distance so it always has a direction.
+    - **Size** → volume (bigger = louder), tweakable in the audio constants.
     - **Color** → sample variation.
-    - **Area** → reverb size/decay parameter.
-- **Polyphony cap: 16 simultaneous voices.** Beyond the cap, either the oldest/lowest-priority
-  voices are dropped or master gain scales down with voice count (exact rule TBD at
-  implementation time).
+- **No voice cap.** The editor allows at most 15 shapes (one per sample), so at most 15 voices
+  play together.
+
+See `docs/features/10-audio.md` for the detailed design.
 
 ## Admin
 
@@ -83,5 +89,5 @@ A drawing = a user-owned collection of shape records.
 3. Save drawing (geometry only, logical coordinates).
 4. Retrieve own drawing(s).
 5. Admin read-only gallery across all users.
-6. Web Audio playback: sample triggering, pan/volume from position, reverb type/size from
-   color/area, polyphony cap.
+6. Web Audio playback: sample triggering, binaural position, volume and reverb send from
+   distance to the canvas center.

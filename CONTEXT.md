@@ -57,6 +57,17 @@ _Avoid_: dashboard
 **Viewer**:
 The read-only display of a drawing that the admin opens from the gallery. Nothing can be placed, selected, resized or deleted in it.
 
+**Voice**:
+The looping sound a shape produces, heard from the shape's position around the canvas center. One voice per shape; its sound is the shape's sample.
+_Avoid_: track, channel, layer
+
+**Playback**:
+All voices of a drawing sounding together, until paused. Started and paused with the play/pause button. Not a timeline: there is no order and no end.
+_Avoid_: sequence, replay
+
+**Listener**:
+The point from which a drawing is heard: the center of the canvas, facing the top of the canvas. A shape's offset from it decides where its voice seems to come from: left/right as on screen, top of the canvas in front, bottom behind.
+
 ## Editor modes
 
 - **Base**: nothing selected or pending.

@@ -49,9 +49,7 @@ Do not implement a timeline or stroke-by-stroke sequencer for v1.
 
 ## Voice limit
 
-The application supports at most 16 simultaneous voices.
-
-The exact strategy used when the cap is exceeded is intentionally left to implementation.
+No voice cap, every sources can play at once (15 layers - 3 shapes \* 5 colors)
 
 ## Admin is read-only
 

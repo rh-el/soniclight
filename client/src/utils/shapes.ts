@@ -15,6 +15,15 @@ export const COLORS = [
 	{ name: "e", hex: "#9381FF" },
 ];
 
+const SAMPLE_FAMILIES: Record<ShapeType, string> = {
+	CIRCLE: "pad",
+	RECTANGLE: "voice",
+	TRIANGLE: "texture",
+};
+
+export const sampleUrl = (shape: Pick<Shape, "type" | "color">) =>
+	`/audio/samples/${SAMPLE_FAMILIES[shape.type]}_${shape.color}.wav`;
+
 export const colorHex = (name: string) => COLORS.find((c) => c.name === name)?.hex ?? "#888";
 
 export const shapeName = (shape: Pick<Shape, "type" | "color">) => `${shape.type.toLowerCase()}_${shape.color}`;

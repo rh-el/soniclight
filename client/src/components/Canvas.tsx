@@ -49,6 +49,10 @@ function hitTest(shape: Shape, px: number, py: number) {
 	return Math.abs(x) <= halfAtY;
 }
 
+// screen margin around the logical square. Must not be CSS padding on the canvas element:
+// p5 mouse coordinates ignore it, which shifts hit-testing away from the drawing.
+const MARGIN = 16;
+
 const topShapeAt = (x: number, y: number) =>
 	[...useEditorStore.getState().shapes].sort((a, b) => b.z - a.z).find((s) => hitTest(s, x, y));
 
@@ -66,7 +70,7 @@ export default function Canvas({ readOnly = false }: { readOnly?: boolean }) {
 			const layout = () => {
 				const w = Math.max(1, container.clientWidth);
 				const h = Math.max(1, container.clientHeight);
-				scale = Math.min(w, h) / CANVAS_SIZE;
+				scale = (Math.min(w, h) - 2 * MARGIN) / CANVAS_SIZE;
 				offsetX = (w - CANVAS_SIZE * scale) / 2;
 				offsetY = (h - CANVAS_SIZE * scale) / 2;
 				return { w, h };
@@ -83,7 +87,7 @@ export default function Canvas({ readOnly = false }: { readOnly?: boolean }) {
 				const { w, h } = layout();
 				const canvas = p.createCanvas(w, h);
 				canvas.parent(container);
-				canvas.elt.classList.add("bg-background", "touch-none", "p-4", "radius-xl");
+				canvas.elt.classList.add("bg-background", "touch-none");
 				new ResizeObserver(() => {
 					const { w, h } = layout();
 					p.resizeCanvas(w, h);
