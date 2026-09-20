@@ -1,0 +1,2 @@
+#!/bin/sh
+npm --prefix client run format:check && npm --prefix client run lint && npm --prefix server run format:check && npm --prefix server run lint
