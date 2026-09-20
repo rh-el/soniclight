@@ -44,13 +44,27 @@ export const clampCenter = (
 ) => {
 	const { width, height } = shapeExtent(type, size);
 	const rad = (rotation * Math.PI) / 180;
-	const cos = Math.abs(Math.cos(rad));
-	const sin = Math.abs(Math.sin(rad));
-	const halfW = (width * cos + height * sin) / 2;
-	const halfH = (width * sin + height * cos) / 2;
+	const cos = Math.cos(rad);
+	const sin = Math.sin(rad);
+	// real vertices for triangle so invisible bouding box doesn't block the shape
+	const points =
+		type === "TRIANGLE"
+			? [
+					[0, -height / 2],
+					[width / 2, height / 2],
+					[-width / 2, height / 2],
+				]
+			: [
+					[-width / 2, -height / 2],
+					[width / 2, -height / 2],
+					[width / 2, height / 2],
+					[-width / 2, height / 2],
+				];
+	const xs = points.map(([px, py]) => px * cos - py * sin);
+	const ys = points.map(([px, py]) => px * sin + py * cos);
 
 	return {
-		x: clamp(x, halfW, CANVAS_SIZE - halfW),
-		y: clamp(y, halfH, CANVAS_SIZE - halfH),
+		x: clamp(x, -Math.min(...xs), CANVAS_SIZE - Math.max(...xs)),
+		y: clamp(y, -Math.min(...ys), CANVAS_SIZE - Math.max(...ys)),
 	};
 };
