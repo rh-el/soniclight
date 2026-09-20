@@ -1,5 +1,5 @@
 import { Circle, RectangleHorizontal, Trash2, Triangle } from "lucide-react";
-import { useRef, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
@@ -28,13 +28,13 @@ export default function Toolbox() {
 	const rotateShape = useEditorStore((s) => s.rotateShape);
 	const deleteSelected = useEditorStore((s) => s.deleteSelected);
 
+	// only for sliders animation purpose
 	const selected = shapes.find((s) => s.id === selectedId);
-	// Keep the last selected shape so the sliders stay rendered while the toolbar collapses.
-	const lastSelected = useRef(selected);
-	if (selected) {
-		lastSelected.current = selected;
+	const [lastSelected, setLastSelected] = useState(selected);
+	if (selected && selected !== lastSelected) {
+		setLastSelected(selected);
 	}
-	const sliderShape = selected ?? lastSelected.current;
+	const sliderShape = selected ?? lastSelected;
 	const isUpdating = mode === "shape-update" && !!selected;
 
 	return (
