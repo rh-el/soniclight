@@ -68,7 +68,7 @@ const topShapeAt = (x: number, y: number) =>
 		.sort((a, b) => b.z - a.z)
 		.find((s) => hitTest(s, x, y));
 
-export default function Canvas() {
+export default function Canvas({ readOnly = false }: { readOnly?: boolean }) {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -174,6 +174,7 @@ export default function Canvas() {
 				(
 					p as unknown as { canvas: HTMLCanvasElement }
 				).canvas.style.cursor =
+					!readOnly &&
 					mode !== "color-selected" &&
 					overCanvas &&
 					topShapeAt(cursor.x, cursor.y)
@@ -182,7 +183,7 @@ export default function Canvas() {
 			};
 
 			p.mousePressed = (e: MouseEvent) => {
-				if (!isOnCanvas(e)) {
+				if (readOnly || !isOnCanvas(e)) {
 					return;
 				}
 
@@ -226,7 +227,7 @@ export default function Canvas() {
 
 		const instance = new p5(sketch);
 		return () => instance.remove();
-	}, []);
+	}, [readOnly]);
 
 	return <div ref={containerRef} className="absolute inset-0" />;
 }

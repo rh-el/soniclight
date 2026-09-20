@@ -5,8 +5,11 @@ import { Card, CardContent, CardFooter } from "./ui/card";
 import { Plus } from "lucide-react";
 
 interface CardComponentProps {
-	drawingData?: Drawing;
+	drawingData?: Pick<Drawing, "id" | "name">;
 	username?: string;
+	ownerUsername?: string;
+	shapeCount?: number;
+	readOnly?: boolean;
 	isEmpty?: boolean;
 	onCreate?: () => void;
 }
@@ -14,6 +17,9 @@ interface CardComponentProps {
 export default function CardComponent({
 	drawingData,
 	username,
+	ownerUsername,
+	shapeCount,
+	readOnly = false,
 	isEmpty = false,
 	onCreate,
 }: CardComponentProps) {
@@ -38,18 +44,27 @@ export default function CardComponent({
 						{drawingData?.name}
 					</h2>
 					<p className="font-mono text-sm text-muted-foreground">
-						{username}
+						{readOnly ? ownerUsername : username}
 					</p>
+					{readOnly && (
+						<p className="font-mono text-sm text-muted-foreground">
+							{shapeCount} {shapeCount === 1 ? "shape" : "shapes"}
+						</p>
+					)}
 				</div>
 			</CardContent>
 			<CardFooter>
 				<Button
 					className="w-full font-mono bg-primary/20 text-primary-light cursor-pointer hover:text-foreground"
 					onClick={() =>
-						navigate(`/${username}/draw/${drawingData?.id}`)
+						navigate(
+							readOnly
+								? `/admin/drawing/${drawingData?.id}`
+								: `/${username}/draw/${drawingData?.id}`,
+						)
 					}
 				>
-					edit
+					{readOnly ? "view" : "edit"}
 				</Button>
 			</CardFooter>
 		</Card>

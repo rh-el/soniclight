@@ -7,7 +7,7 @@ import Toolbox from "../components/Toolbox";
 import { useEditorStore } from "../state-management/editor";
 import SaveButton from "../components/SaveButton";
 
-export default function Draw() {
+export default function Draw({ readOnly = false }: { readOnly?: boolean }) {
 	const drawing = useLoaderData() as Drawing;
 
 	useEffect(() => {
@@ -27,16 +27,24 @@ export default function Draw() {
 
 	return (
 		<div className="relative h-dvh w-full overflow-hidden bg-background">
-			<Canvas />
+			<Canvas readOnly={readOnly} />
 			<div className="absolute left-4 top-4">
-				<LeftPanel title={drawing.name} drawingId={drawing.id} />
+				<LeftPanel
+					title={drawing.name}
+					drawingId={drawing.id}
+					readOnly={readOnly}
+				/>
 			</div>
-			<div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-				<Toolbox />
-			</div>
-			<div className="absolute top-2 flex flex-col items-end gap-2 right-2">
-				<SaveButton drawingId={drawing.id} />
-			</div>
+			{!readOnly && (
+				<>
+					<div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+						<Toolbox />
+					</div>
+					<div className="absolute top-2 flex flex-col items-end gap-2 right-2">
+						<SaveButton drawingId={drawing.id} />
+					</div>
+				</>
+			)}
 		</div>
 	);
 }

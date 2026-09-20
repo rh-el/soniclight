@@ -11,9 +11,11 @@ import DrawingInformationsDialog from "./DrawingInformationsDialog";
 export default function LeftPanel({
 	title: initialTitle,
 	drawingId,
+	readOnly = false,
 }: {
 	title: string;
 	drawingId: string;
+	readOnly?: boolean;
 }) {
 	const [isOpen, setIsOpen] = useState(true);
 	const [title, setTitle] = useState(initialTitle);
@@ -22,6 +24,10 @@ export default function LeftPanel({
 	const hasShapes = useEditorStore((s) => s.shapes.length > 0);
 
 	const goHome = () => {
+		if (readOnly) {
+			navigate("/admin");
+			return;
+		}
 		const username = localStorage.getItem(USERNAME_KEY);
 		navigate(username ? `/${username}/home` : "/login");
 	};
@@ -48,14 +54,16 @@ export default function LeftPanel({
 			</div>
 			<div className="flex items-center justify-between">
 				<h2 className="pl-2">{title}</h2>
-				<Button
-					onClick={() => setIsDialogOpen(true)}
-					variant="ghost"
-					size="icon"
-					className="cursor-pointer"
-				>
-					<SquarePen size={16} className="cursor-pointer" />
-				</Button>
+				{!readOnly && (
+					<Button
+						onClick={() => setIsDialogOpen(true)}
+						variant="ghost"
+						size="icon"
+						className="cursor-pointer"
+					>
+						<SquarePen size={16} className="cursor-pointer" />
+					</Button>
+				)}
 			</div>
 			<DrawingInformationsDialog
 				open={isDialogOpen}
@@ -67,7 +75,7 @@ export default function LeftPanel({
 			{isOpen && hasShapes && (
 				<>
 					<Separator />
-					<ShapeList />
+					<ShapeList readOnly={readOnly} />
 				</>
 			)}
 		</div>
