@@ -13,26 +13,28 @@ export default function Layout() {
 	return (
 		<div className="flex h-dvh w-full flex-col bg-background">
 			{isAdmin && (
-				<header className="flex w-full items-center gap-2 border-b border-border px-10 py-3">
-					{[
-						{ to: `/${username}/home`, label: "Drawings" },
-						{ to: "/admin", label: "Admin" },
-					].map(({ to, label }) => (
-						<NavLink
-							key={to}
-							to={to}
-							className={({ isActive }) =>
-								cn(
-									tabStyle,
-									isActive
-										? "bg-primary/20 text-primary-light"
-										: "text-muted-foreground hover:text-foreground",
-								)
-							}
-						>
-							{label}
-						</NavLink>
-					))}
+				<header className="flex w-full justify-center items-center gap-2 border-b border-border py-3">
+					<div className="max-w-338 w-full flex justify-end px-10 gap-4">
+						{[
+							{ to: `/${username}/home`, label: "drawings" },
+							{ to: `/${username}/gallery`, label: "gallery" },
+						].map(({ to, label }) => (
+							<NavLink
+								key={to}
+								to={to}
+								className={({ isActive }) =>
+									cn(
+										tabStyle,
+										isActive
+											? "bg-primary/20 text-primary-light"
+											: "text-muted-foreground hover:text-foreground",
+									)
+								}
+							>
+								{label}
+							</NavLink>
+						))}
+					</div>
 				</header>
 			)}
 			<div className="min-h-0 flex-1">

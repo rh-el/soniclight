@@ -26,7 +26,7 @@ const router = createBrowserRouter([
 				element: <Home />,
 			},
 			{
-				path: "/admin",
+				path: "/:username/gallery",
 				loader: adminLoader,
 				element: <Admin />,
 			},

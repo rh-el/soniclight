@@ -24,10 +24,6 @@ export default function LeftPanel({
 	const hasShapes = useEditorStore((s) => s.shapes.length > 0);
 
 	const goHome = () => {
-		if (readOnly) {
-			navigate("/admin");
-			return;
-		}
 		const username = localStorage.getItem(USERNAME_KEY);
 		navigate(username ? `/${username}/home` : "/login");
 	};
