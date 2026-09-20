@@ -36,7 +36,7 @@ export default function CardComponent({
 		);
 	}
 	return (
-		<Card className="bg-card/50 border-border/50">
+		<Card className="bg-card/50 border-border">
 			<CardContent className="flex flex-col gap-3">
 				<div className="aspect-square w-full rounded-md bg-muted" />
 				<div className="flex flex-col">
@@ -55,7 +55,7 @@ export default function CardComponent({
 			</CardContent>
 			<CardFooter>
 				<Button
-					className="w-full font-mono bg-primary/20 text-primary-light cursor-pointer hover:text-foreground"
+					className="w-full font-mono bg-primary/20 text-primary-light cursor-pointer hover:text-foreground border-primary-light/20 border"
 					onClick={() =>
 						navigate(
 							readOnly
