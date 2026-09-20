@@ -9,9 +9,7 @@ export class AppError extends Error {
 }
 
 export class InvalidUsernameError extends AppError {
-	constructor(
-		message = "Username must be a string of at least 3 characters",
-	) {
+	constructor(message = "Username must be a string of at least 3 characters") {
 		super(message, 400);
 	}
 }

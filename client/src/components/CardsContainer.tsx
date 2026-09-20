@@ -7,19 +7,11 @@ interface CardsContainerProps {
 	onCreate: () => void;
 }
 
-export default function CardsContainer({
-	username,
-	drawings,
-	onCreate,
-}: CardsContainerProps) {
+export default function CardsContainer({ username, drawings, onCreate }: CardsContainerProps) {
 	return (
 		<div className=" w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 			{drawings.map((drawing) => (
-				<CardComponent
-					key={drawing.id}
-					drawingData={drawing}
-					username={username}
-				/>
+				<CardComponent key={drawing.id} drawingData={drawing} username={username} />
 			))}
 			<CardComponent isEmpty onCreate={onCreate} />
 		</div>

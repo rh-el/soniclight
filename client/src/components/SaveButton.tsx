@@ -17,11 +17,7 @@ export default function SaveButton({ drawingId }: { drawingId: string }) {
 		setSaving(true);
 		setError(null);
 		try {
-			await saveDrawingShapes(
-				username,
-				drawingId,
-				useEditorStore.getState().shapes,
-			);
+			await saveDrawingShapes(username, drawingId, useEditorStore.getState().shapes);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Failed to save drawing");
 		} finally {
@@ -31,18 +27,10 @@ export default function SaveButton({ drawingId }: { drawingId: string }) {
 
 	return (
 		<>
-			<Button
-				onClick={handleSaveComposition}
-				disabled={saving}
-				className="rounded-xl px-4 py-6"
-			>
+			<Button onClick={handleSaveComposition} disabled={saving} className="rounded-xl px-4 py-6">
 				{saving ? "saving..." : "save"}
 			</Button>
-			{error && (
-				<span className="text-xs text-red-400 max-w-50 text-right">
-					{error}
-				</span>
-			)}
+			{error && <span className="text-xs text-red-400 max-w-50 text-right">{error}</span>}
 		</>
 	);
 }

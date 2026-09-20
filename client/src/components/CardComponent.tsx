@@ -40,12 +40,8 @@ export default function CardComponent({
 			<CardContent className="flex flex-col gap-3">
 				<div className="aspect-square w-full rounded-md bg-muted" />
 				<div className="flex flex-col">
-					<h2 className="font-mono font-bold text-foreground">
-						{drawingData?.name}
-					</h2>
-					<p className="font-mono text-sm text-muted-foreground">
-						{readOnly ? ownerUsername : username}
-					</p>
+					<h2 className="font-mono font-bold text-foreground">{drawingData?.name}</h2>
+					<p className="font-mono text-sm text-muted-foreground">{readOnly ? ownerUsername : username}</p>
 					{readOnly && (
 						<p className="font-mono text-sm text-muted-foreground">
 							{shapeCount} {shapeCount === 1 ? "shape" : "shapes"}
@@ -58,9 +54,7 @@ export default function CardComponent({
 					className="w-full font-mono bg-primary/20 text-primary-light cursor-pointer hover:text-foreground border-primary-light/20 border"
 					onClick={() =>
 						navigate(
-							readOnly
-								? `/admin/drawing/${drawingData?.id}`
-								: `/${username}/draw/${drawingData?.id}`,
+							readOnly ? `/admin/drawing/${drawingData?.id}` : `/${username}/draw/${drawingData?.id}`,
 						)
 					}
 				>

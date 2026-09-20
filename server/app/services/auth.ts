@@ -1,9 +1,5 @@
 import { findUserByUsername } from "../crud/user";
-import {
-	ForbiddenAdminError,
-	InvalidUsernameError,
-	UnknownUserError,
-} from "../exceptions";
+import { ForbiddenAdminError, InvalidUsernameError, UnknownUserError } from "../exceptions";
 
 export const ADMIN_USERNAME = "admin";
 const MIN_USERNAME_LENGTH = 3;

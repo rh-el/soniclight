@@ -17,11 +17,7 @@ export interface Shape {
 	rotation: number;
 }
 
-export type EditorMode =
-	| "base"
-	| "shape-selected"
-	| "color-selected"
-	| "shape-update";
+export type EditorMode = "base" | "shape-selected" | "color-selected" | "shape-update";
 
 export interface Drawing {
 	id: string;

@@ -8,5 +8,4 @@ export const signup = (username: string) =>
 		"Failed to create account",
 	);
 
-export const login = (username: string) =>
-	request<LoginResponse>("/user/login", { username }, "Failed to log in");
+export const login = (username: string) => request<LoginResponse>("/user/login", { username }, "Failed to log in");

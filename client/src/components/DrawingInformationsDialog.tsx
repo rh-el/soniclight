@@ -69,12 +69,8 @@ export default function DrawingInformationsDialog({
 			<DialogContent className="sm:max-w-sm">
 				<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
 					<DialogHeader>
-						<DialogTitle className="text-md text-foreground">
-							edit drawing title
-						</DialogTitle>
-						<DialogDescription className="sr-only">
-							Change the title of this drawing.
-						</DialogDescription>
+						<DialogTitle className="text-md text-foreground">edit drawing title</DialogTitle>
+						<DialogDescription className="sr-only">Change the title of this drawing.</DialogDescription>
 					</DialogHeader>
 					<div className="space-y-2">
 						<Label className="text-foreground" htmlFor="name">
@@ -93,9 +89,7 @@ export default function DrawingInformationsDialog({
 							className="text-foreground"
 						/>
 						{error && (
-							<p className="text-sm text-destructive animate-in fade-in slide-in-from-top-1">
-								{error}
-							</p>
+							<p className="text-sm text-destructive animate-in fade-in slide-in-from-top-1">{error}</p>
 						)}
 					</div>
 					<DialogFooter>

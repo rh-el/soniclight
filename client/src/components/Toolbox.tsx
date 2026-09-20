@@ -2,23 +2,11 @@ import { Circle, RectangleHorizontal, Trash2, Triangle } from "lucide-react";
 import { useRef, type ReactNode } from "react";
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { cn } from "../lib/utils";
 import { useEditorStore } from "../state-management/editor";
 import type { ShapeType } from "../types";
-import {
-	COLORS,
-	MAX_ROTATION,
-	MAX_SIZE,
-	MIN_SIZE,
-	SHAPE_TYPES,
-	canRotate,
-} from "../utils/shapes";
+import { COLORS, MAX_ROTATION, MAX_SIZE, MIN_SIZE, SHAPE_TYPES, canRotate } from "../utils/shapes";
 
 const icons: Record<ShapeType, ReactNode> = {
 	CIRCLE: <Circle />,
@@ -53,10 +41,7 @@ export default function Toolbox() {
 		<div className="flex items-center gap-2 duration-300 transition-[width] rounded-lg border border-border bg-background/90 p-2">
 			{SHAPE_TYPES.map((type) => {
 				const availableColors = COLORS.filter(
-					(c) =>
-						!shapes.some(
-							(s) => s.type === type && s.color === c.name,
-						),
+					(c) => !shapes.some((s) => s.type === type && s.color === c.name),
 				);
 				const isActive = pendingType === type;
 				return (
@@ -65,11 +50,7 @@ export default function Toolbox() {
 						open={mode === "shape-selected" && isActive}
 						onOpenChange={(open) => {
 							if (open) chooseType(type);
-							else if (
-								useEditorStore.getState().mode ===
-								"shape-selected"
-							)
-								cancel();
+							else if (useEditorStore.getState().mode === "shape-selected") cancel();
 						}}
 					>
 						<DropdownMenuTrigger asChild>
@@ -97,10 +78,7 @@ export default function Toolbox() {
 									className="cursor-pointer w-9 h-9 focus:brightness-120"
 									style={{ backgroundColor: c.hex }}
 								>
-									<span
-										className="size-3 rounded-full"
-										style={{ backgroundColor: c.hex }}
-									/>
+									<span className="size-3 rounded-full" style={{ backgroundColor: c.hex }} />
 								</DropdownMenuItem>
 							))}
 						</DropdownMenuContent>
@@ -111,9 +89,7 @@ export default function Toolbox() {
 				aria-hidden={!isUpdating}
 				className={cn(
 					"flex items-center gap-2 overflow-hidden transition-all duration-300 ease-out h-4",
-					isUpdating
-						? "max-w-96 opacity-100"
-						: "pointer-events-none -mr-2 max-w-0 opacity-0",
+					isUpdating ? "max-w-96 opacity-100" : "pointer-events-none -mr-2 max-w-0 opacity-0",
 				)}
 			>
 				{sliderShape && (
@@ -126,9 +102,7 @@ export default function Toolbox() {
 							max={MAX_SIZE}
 							step={1}
 							value={[sliderShape.size]}
-							onValueChange={([size]) =>
-								resizeShape(sliderShape.id, size)
-							}
+							onValueChange={([size]) => resizeShape(sliderShape.id, size)}
 						/>
 						{canRotate(sliderShape.type) && (
 							<Slider
@@ -139,9 +113,7 @@ export default function Toolbox() {
 								max={MAX_ROTATION}
 								step={1}
 								value={[sliderShape.rotation]}
-								onValueChange={([rotation]) =>
-									rotateShape(sliderShape.id, rotation)
-								}
+								onValueChange={([rotation]) => rotateShape(sliderShape.id, rotation)}
 							/>
 						)}
 					</>
@@ -150,10 +122,7 @@ export default function Toolbox() {
 			<Button
 				disabled={mode !== "shape-update"}
 				variant="destructive"
-				className={cn(
-					buttonBase,
-					"bg-transparent hover:bg-destructive/50",
-				)}
+				className={cn(buttonBase, "bg-transparent hover:bg-destructive/50")}
 				onClick={deleteSelected}
 			>
 				<Trash2 />

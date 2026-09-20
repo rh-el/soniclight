@@ -29,11 +29,7 @@ export default function Draw({ readOnly = false }: { readOnly?: boolean }) {
 		<div className="relative h-dvh w-full overflow-hidden bg-background">
 			<Canvas readOnly={readOnly} />
 			<div className="absolute left-4 top-4">
-				<LeftPanel
-					title={drawing.name}
-					drawingId={drawing.id}
-					readOnly={readOnly}
-				/>
+				<LeftPanel title={drawing.name} drawingId={drawing.id} readOnly={readOnly} />
 			</div>
 			{!readOnly && (
 				<>
