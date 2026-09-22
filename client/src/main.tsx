@@ -9,6 +9,7 @@ import Draw from "./pages/Draw";
 import Layout from "./pages/Layout";
 import Admin from "./pages/Admin";
 import { adminDrawingLoader, adminLoader, drawLoader, homeLoader, redirectIfLoggedInLoader } from "./loaders";
+import Root from "./components/Root";
 
 const router = createBrowserRouter([
 	{
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
 		path: "/signup",
 		loader: redirectIfLoggedInLoader,
 		element: <Signup />,
+	},
+	{
+		path: "/",
+		element: <Root />,
 	},
 ]);
 
