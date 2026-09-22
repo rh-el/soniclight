@@ -65,13 +65,6 @@ Run inside the containers (they must be running):
 ./scripts/format.sh
 ```
 
-Optional pre-commit hook, which runs on the host, so install dependencies first:
-
-```
-(cd client && npm ci) && (cd server && npm ci)
-git config core.hooksPath .githooks
-```
-
 ## Documentation
 
 - `docs/requirements.md` product requirements
