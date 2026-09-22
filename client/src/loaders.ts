@@ -2,12 +2,10 @@ import { redirect, type LoaderFunctionArgs } from "react-router-dom";
 import { ApiError } from "./api/client";
 import { getDrawing, getDrawings } from "./api/drawing";
 import { getAllDrawings, getAnyDrawing } from "./api/admin";
-import { ISADMIN_KEY, USERID_KEY, USERNAME_KEY } from "./constants";
+import { ISADMIN_KEY, USERNAME_KEY, clearAuthStorage } from "./constants";
 
 const logoutRedirect = () => {
-	localStorage.removeItem(USERNAME_KEY);
-	localStorage.removeItem(USERID_KEY);
-	localStorage.removeItem(ISADMIN_KEY);
+	clearAuthStorage();
 	return redirect("/login");
 };
 

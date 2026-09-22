@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { createDrawing } from "../api/drawing";
+import { clearAuthStorage } from "../constants";
 import { Button } from "../components/ui/button";
 import CardsContainer from "../components/CardsContainer";
 import type { DrawingsResponse } from "../types";
@@ -23,6 +24,11 @@ export default function Home() {
 		}
 	};
 
+	const logout = () => {
+		clearAuthStorage();
+		navigate("/login");
+	};
+
 	return (
 		<div className="w-full h-full flex flex-col items-center justify-center overflow-hidden bg-background">
 			<div className="flex flex-col w-full h-full max-w-338 items-center py-10 px-10 gap-6">
@@ -30,13 +36,22 @@ export default function Home() {
 					<h1 className="font-bold font-mono tracking-tight text-4xl md:text-5xl text-foreground">
 						drawings
 					</h1>
-					<Button
-						className="w-24 font-mono transition-colors cursor-pointer py-4 h-full"
-						disabled={isCreating}
-						onClick={create}
-					>
-						create
-					</Button>
+					<div className="flex flex-row items-center gap-2">
+						<Button
+							className="w-24 font-mono transition-colors cursor-pointer py-4 h-full"
+							disabled={isCreating}
+							onClick={create}
+						>
+							create
+						</Button>
+						<Button
+							variant="outline"
+							className="w-24 font-mono transition-colors cursor-pointer py-4 h-full"
+							onClick={logout}
+						>
+							logout
+						</Button>
+					</div>
 				</div>
 				{error && <p className="w-full font-mono text-sm text-destructive">{error}</p>}
 				<CardsContainer username={username} drawings={drawings} onCreate={create} />
